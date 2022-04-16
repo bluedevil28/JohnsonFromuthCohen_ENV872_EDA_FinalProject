@@ -280,24 +280,6 @@ summary(race.bikes.correlation)
 
 
 ```
-
-```{r wfh joining and correlation}
-#joining working from home and bikes
-WFH.join <- st_join(x = suffolk.wfh.sf, y = Bikes.2021.sf, 
-                               join = st_intersects)
-
-Bikes.WFH.processed <- WFH.join %>%
-  group_by(NAME, workfromhome, GEOID) %>%
-  summarise(BikeDocks = sum(Total_docks),
-            NumStations = length(unique(Number)))
-
-WFH.bikes.correlation <- lm(data=Bikes.WFH.processed , NumStations ~ workfromhome )
-summary(WFH.bikes.correlation)
-#R-squared 0.001843, p-value 0.5441. Not statistically significant -VERY large p value!  
-
-cor.test(Bikes.WFH.processed$NumStations, Bikes.WFH.processed$workfromhome)
-#Correlation coefficient is 0.0429. Correlation is very weak (practically none)
-
 ```
 
 ```{r Home ownership and bikes joining and regression}
