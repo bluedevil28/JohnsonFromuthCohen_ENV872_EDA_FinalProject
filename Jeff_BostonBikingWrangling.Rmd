@@ -368,15 +368,15 @@ ma.boston.homeowner.1
 ```
 
 ```{r all vehicles, echo=FALSE}
-ma_suffolk.allVhc <- get_acs(
-  geography = "tract", 
-  variables = c(carpool= "B08006_004", drive_alone = "B08006_003", totpop = "B03002_001", public_transit = "B08006_008"
-                ),  
-  state = "MA", 
-  geometry = TRUE,
-  year = 2020,
-  county = "Suffolk"
-)
+  ma_suffolk.allVhc <- get_acs(
+    geography = "tract", 
+    variables = c(carpool= "B08006_004", drive_alone = "B08006_003", totpop = "B03002_001", public_transit = "B08006_008"
+                  ),  
+    state = "MA", 
+    geometry = TRUE,
+    year = 2020,
+    county = "Suffolk"
+  )
 
 #Organize data by removing moe and adjusting variables from long to wide 
 ma_suffolk.allVhc <-select(ma_suffolk.allVhc, -moe
@@ -384,6 +384,10 @@ ma_suffolk.allVhc <-select(ma_suffolk.allVhc, -moe
 
 ma_suffolk.allVhc.1<-spread(ma_suffolk.allVhc, key=variable, value=estimate)
 ma_suffolk.allVhc
+
+write.csv(ma_suffolk.allVhc.1, "/Users/jeff_fromuth/Desktop/DUKE/EDA/EDA Project/Data/Bikes_Vhc.csv") 
+
+getwd()
 ```
 
 ```{r all children, echo=FALSE}
@@ -404,6 +408,8 @@ ma_suffolk.allChld <-select(ma_suffolk.allChld, -moe
 
 ma_suffolk.allChld.1<-spread(ma_suffolk.allChld, key=variable, value=estimate)
 ma_suffolk.allChld.1
+
+write.csv(ma_suffolk.allChld.1, "/Users/jeff_fromuth/Desktop/DUKE/EDA/EDA Project/Data/Bikes_Chld.csv") 
 ```
 
 
