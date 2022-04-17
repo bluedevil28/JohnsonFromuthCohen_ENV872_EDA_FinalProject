@@ -385,7 +385,7 @@ ma_suffolk.allVhc <-select(ma_suffolk.allVhc, -moe
 ma_suffolk.allVhc.1<-spread(ma_suffolk.allVhc, key=variable, value=estimate)
 ma_suffolk.allVhc
 
-write.csv(ma_suffolk.allVhc.1, "/Users/jeff_fromuth/Desktop/DUKE/EDA/EDA Project/Data/Bikes_Vhc.csv") 
+write.csv(ma_suffolk.allVhc.1, "/Users/jeff_fromuth/Desktop/DUKE/EDA/JohnsonFromuthCohen_ENV872_EDA_FinalProject/Data_Processed/Bikes_Vhc.csv") 
 
 getwd()
 ```
@@ -409,7 +409,7 @@ ma_suffolk.allChld <-select(ma_suffolk.allChld, -moe
 ma_suffolk.allChld.1<-spread(ma_suffolk.allChld, key=variable, value=estimate)
 ma_suffolk.allChld.1
 
-write.csv(ma_suffolk.allChld.1, "/Users/jeff_fromuth/Desktop/DUKE/EDA/EDA Project/Data/Bikes_Chld.csv") 
+write.csv(ma_suffolk.allChld.1, "/Users/jeff_fromuth/Desktop/DUKE/EDA/JohnsonFromuthCohen_ENV872_EDA_FinalProject/Data_Processed/Bikes_Chld.csv") 
 ```
 
 
@@ -500,7 +500,7 @@ ggplot(boston.homeowner.sf) + geom_sf(aes(fill=per.homeowner)) + geom_sf(data=Bi
 ```
 
 <<<<<<< HEAD:Jeff_BostonBikingWrangling.Rmd
-```{r vehilces and bikes join and correlation}
+```{r vehilces and bikes join and lm}
 #joining vehicle options and bikes
 Vhc.join <- st_join(x = suffolk.allVhc.sf, y = Bikes.2021.sf, 
                                join = st_intersects)
@@ -516,7 +516,7 @@ summary(Vehicles.bikes.correlation)
 ```
 
 
-```{r children and bikes join and correlation}
+```{r children and bikes join and lm}
 #joining children's environments and bikes
 Chld.join <- st_join(x = suffolk.allChld.sf, y = Bikes.2021.sf, 
                                join = st_intersects)
@@ -532,6 +532,16 @@ summary(Children.bikes.correlation)
 
 
 ```
+
+
+```{r AIC of lm}
+#AIC for vehicles and bike stations
+step(Vehicles.bikes.correlation)
+
+#AIC for children 6-17 and bike stations
+step(Children.bikes.correlation)
+```
+
 
 ```{r wfh joining and correlation}
 #joining home ownership and bikes
