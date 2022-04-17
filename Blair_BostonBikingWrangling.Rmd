@@ -61,32 +61,9 @@ census_api_key('111339232f4137ed330544649d9c1c65d82c047c', `install=TRUE`)
 v20 <- load_variables(2020, "acs5", cache = TRUE)
 View(v20)
 
-ma.suffolk.children <- get_acs(
-  geography = "tract", 
-  variables = c(ownchildren= "B09002_001" 
-                ),  
-  state = "MA", 
-  geometry = TRUE,
-  year = 2020,
-  county = "Suffolk"
-)
-
 ma.suffolk.public.transport <- get_acs(
   geography = "tract", 
   variables = c(means.transport.total= "B08301_001", public.transport = "B08301_010"
-                ),  
-  state = "MA", 
-  geometry = TRUE,
-  year = 2020,
-  county = "Suffolk"
-)
-
-#
-
-#B11003_005, Estimate!!Total:!!Married-couple family:!!With own children of the householder under 18 years:!!Under 6 years and 6 to 17 years
-ma_married_couples.children <- get_acs(
-  geography = "tract", 
-  variables = c(fifteen.min = "B08135_003" 
                 ),  
   state = "MA", 
   geometry = TRUE,
@@ -128,6 +105,128 @@ ma.suffolk.homeowner <- get_acs(
   geometry = TRUE
 )
 
+#census tract data for carpool
+#Estimate!!Total car, truck, van:!!Carpooled (both genders)
+
+ma.suffolk.carpool <- get_acs(
+  geography = "tract", 
+  variables = c(totCarpool = "B08006_004E" 
+                ),  
+  state = "MA", 
+  geometry = TRUE,
+  year = 2020,
+  county = "Suffolk"
+)
+
+#Estimate!!commuting to work 16 y and over, car, truck, or van carpooled
+
+ma.suffolk.carpoolcmte <- get_acs(
+  geography = "tract",
+  variables = c(cmteCarpool = "DP03_0020E"
+                ),
+  state = "MA",
+  geometry = TRUE,
+  year = 2020,
+  county = "Suffolk"
+)
+
+# Total Public transportation 
+
+ma.suffolk.pubTr <- get_acs(
+  geography = "tract",
+  variables = c(totPubTr = "B08006_008E"
+                ),
+  state = "MA",
+  geometry = TRUE,
+  year = 2020,
+  county = "Suffolk"
+)
+
+
+# Total Drove Alone
+
+ma.suffolk.drvAlne <- get_acs(
+  geography = "tract",
+  variables = c(cmteCarpool = "B08006_003E"
+                ),
+  state = "MA",
+  geometry = TRUE,
+  year = 2020,
+  county = "Suffolk"
+)
+
+#All Vehicles
+ ma.suffolk.allVhc <- get_acs(
+    geography = "tract", 
+    variables = c(carpool= "B08006_004", drive_alone = "B08006_003", totpop = "B03002_001", public_transit = "B08006_008"
+                  ),  
+    state = "MA", 
+    geometry = TRUE,
+    year = 2020,
+    county = "Suffolk"
+  )
+
+#r census tract for children 6-17
+
+ma.suffolk.totChild6_17 <- get_acs(
+  geography = "tract",
+  variables = c(totChild6_17 = "B05009_020E"
+                ),
+  state = "MA",
+  geometry = TRUE,
+  year = 2020,
+  county = "Suffolk"
+)
+
+#census tract for married couple below poverty line with children ages 6 - 17
+
+ma.suffolk.PovChld6_17 <- get_acs(
+  geography = "tract",
+  variables = c(PovChld6_17 = "B17006_006"
+                ),
+  state = "MA",
+  geometry = TRUE,
+  year = 2020,
+  county = "Suffolk"
+)
+
+
+# census tract own children of the householder 6-17, all
+#parents in family in labor force 
+
+ma.suffolk.chld6_17WrkPrnts <- get_acs(
+  geography = "tract",
+  variables = c(chld6_17WrkPrnts = "DP03_0017E"
+                ),
+  state = "MA",
+  geometry = TRUE,
+  year = 2020,
+  county = "Suffolk"
+)
+
+
+# census tract children 6 to 17 living with one parent 
+
+ma.suffolk.chld6_17OnePrnt <- get_acs(
+  geography = "tract",
+  variables = c(chld6_17OnePrnt = "B23008_021E"
+                ),
+  state = "MA",
+  geometry = TRUE,
+  year = 2020,
+  county = "Suffolk"
+)
+
+# All children
+ma.suffolk.allChld <- get_acs(
+  geography = "tract", 
+  variables = c(workPrnts6to17 = "DP03_0017", PovChld6_17 = "B17006_006", totpop6to17 = "B05009_020", onePrnt6to17 = "B23008_021", totpop = "B03002_001"
+                ),  
+  state = "MA", 
+  geometry = TRUE,
+  year = 2020,
+  county = "Suffolk"
+)
 
 ```
 
@@ -159,6 +258,73 @@ ma.boston.homeowner <- ma.suffolk.homeowner%>%
          GEOID != "25025990101", GEOID != "25025080801", 
          GEOID != "25025981100")
 
+
+ma.boston.carpool <- ma.suffolk.carpool %>% 
+      filter(GEOID %in% census_tracts$GEOID20) %>%
+      filter(GEOID != "25025981202", GEOID != "25025981800", GEOID != "25025981300",
+         GEOID != "25025990101", GEOID != "25025080801", 
+         GEOID != "25025981100")
+
+ma.boston.carpoolcmte <- ma.suffolk.carpoolcmte %>% 
+      filter(GEOID %in% census_tracts$GEOID20) %>%
+      filter(GEOID != "25025981202", GEOID != "25025981800", GEOID != "25025981300",
+         GEOID != "25025990101", GEOID != "25025080801", 
+         GEOID != "25025981100")
+
+
+ma.boston.pubTr <- ma.suffolk.pubTr %>% 
+      filter(GEOID %in% census_tracts$GEOID20) %>%
+      filter(GEOID != "25025981202", GEOID != "25025981800", GEOID != "25025981300",
+         GEOID != "25025990101", GEOID != "25025080801", 
+         GEOID != "25025981100")
+
+
+ma.boston.drvAlne <- ma.suffolk.drvAlne %>% 
+      filter(GEOID %in% census_tracts$GEOID20) %>%
+      filter(GEOID != "25025981202", GEOID != "25025981800", GEOID != "25025981300",
+         GEOID != "25025990101", GEOID != "25025080801", 
+         GEOID != "25025981100")
+
+
+ma.boston.totChild6_17 <- ma.suffolk.totChild6_17 %>% 
+      filter(GEOID %in% census_tracts$GEOID20) %>%
+      filter(GEOID != "25025981202", GEOID != "25025981800", GEOID != "25025981300",
+         GEOID != "25025990101", GEOID != "25025080801", 
+         GEOID != "25025981100")
+
+
+ma.boston.PovChld6_17 <- ma.suffolk.PovChld6_17 %>% 
+      filter(GEOID %in% census_tracts$GEOID20) %>%
+      filter(GEOID != "25025981202", GEOID != "25025981800", GEOID != "25025981300",
+         GEOID != "25025990101", GEOID != "25025080801", 
+         GEOID != "25025981100")
+
+ma.boston.chld6_17WrkPrnts <- ma.suffolk.chld6_17WrkPrnts %>% 
+      filter(GEOID %in% census_tracts$GEOID20) %>%
+      filter(GEOID != "25025981202", GEOID != "25025981800", GEOID != "25025981300",
+         GEOID != "25025990101", GEOID != "25025080801", 
+         GEOID != "25025981100")
+
+ma.boston.chld6_17OnePrnt <- ma.suffolk.chld6_17OnePrnt %>% 
+      filter(GEOID %in% census_tracts$GEOID20) %>%
+      filter(GEOID != "25025981202", GEOID != "25025981800", GEOID != "25025981300",
+         GEOID != "25025990101", GEOID != "25025080801", 
+         GEOID != "25025981100")
+
+ma.boston.allVhc <- ma_suffolk.allVhc %>% 
+      filter(GEOID %in% census_tracts$GEOID20) %>%
+      filter(GEOID != "25025981202", GEOID != "25025981800", GEOID != "25025981300",
+         GEOID != "25025990101", GEOID != "25025080801", 
+         GEOID != "25025981100")
+
+
+ma.boston.allChld <- ma.suffolk.allChld %>%
+ filter(GEOID %in% census_tracts$GEOID20) %>%
+      filter(GEOID != "25025981202", GEOID != "25025981800", GEOID != "25025981300",
+         GEOID != "25025990101", GEOID != "25025080801", 
+         GEOID != "25025981100")
+
+
 ```
 
 ```{r}
@@ -179,6 +345,15 @@ ma.boston.homeowner.1
 
 
 
+ma.boston.allVhc.1<-spread(ma.boston.allVhc, key=variable, value=estimate)
+ma.boston.allVhc.1
+
+
+ma.boston.allChld <-select(ma.boston.allChld, -moe
+                      )
+
+ma.boston.allChld.1<-spread(ma.boston.allChld, key=variable, value=estimate)
+ma.boston.allChld.1
 ```
 
 ```{r}
@@ -191,6 +366,14 @@ ma.boston.public.transport.1 <- mutate(ma.boston.public.transport.1, per.public 
 ma.boston.homeowner.1 <- mutate(ma.boston.homeowner.1, per.homeowner =
                            homeowner/total.homes)
 ma.boston.homeowner.1
+
+#Means of transport to work
+ma.boston.allVhc.1 <- mutate(ma.boston.allVhc.1, carpool = carpool/totpop,
+                            drive_alone = drive_alone/totpop, public_transit = public_transit/totpop) 
+
+#Children
+ma.boston.allChld.1 <- mutate(ma.boston.allChld.1, workPrnts6to17 = workPrnts6to17/totpop6to17,
+                            PovChld6_17 = PovChld6_17/totpop6to17, onePrnt6to17 = onePrnt6to17/totpop6to17, totpop6to17 = totpop6to17/totpop ) 
 
 ```
 
@@ -213,6 +396,15 @@ boston.public.transit.sf <- ma.boston.public.transport.1 %>%
 boston.homeowner.sf <- ma.boston.homeowner.1 %>% 
   st_as_sf(coords = c('geometry'),
            crs=4269)
+
+boston.allVhc.sf <- ma.boston.allVhc.1 %>% 
+  st_as_sf(coords = c('geometry'),
+           crs=4269)
+
+boston.allChld.sf <- ma.boston.allChld.1 %>% 
+  st_as_sf(coords = c('geometry'),
+           crs=4269)
+
 
 
 ```
@@ -252,16 +444,28 @@ public.transit.join<-st_join(x = boston.public.transit.sf, y = Bikes.2021.sf,
 homeowner.join<-st_join(x = boston.homeowner.sf, y = Bikes.2021.sf, 
                                join = st_intersects)
 
-census.data.joined <-cbind(homeowner.join, public.transit.join, income.join, race.join)
+#vehicle options and bikes
+vhc.join <- st_join(x = boston.allVhc.sf, y = Bikes.2021.sf, 
+                               join = st_intersects)
 
+#children
+Chld.join <- st_join(x = boston.allChld.sf, y = Bikes.2021.sf, 
+                               join = st_intersects)
+
+
+census.data.joined <-cbind(homeowner.join, public.transit.join,race.join, vhc.join, Chld.join)
+```
+
+
+```{r race and bikes join and correlation}
 #Calculating number of stations in tract, for some reason there are duplicates of a census tract 
 
-census.data.joined <- select(census.data.joined, -NAME.1, -NAME.2, -NAME.3)
+census.data.joined <- select(census.data.joined, -NAME.1, -NAME.2, -NAME.3, -NAME.4)
 
 
 bikes.data.join <- census.data.joined %>%
-  select(NAME, Name, perwhite, pernonwhite, per.homeowner, per.public, estimate) %>%
-  group_by(NAME, perwhite, pernonwhite, per.homeowner, per.public) %>%
+  select(NAME, Name, perwhite, pernonwhite, per.homeowner, per.public, drive_alone, carpool, onePrnt6to17, PovChld6_17) %>%
+  group_by(NAME, perwhite, pernonwhite, per.homeowner, per.public, drive_alone, carpool, onePrnt6to17, PovChld6_17) %>%
    #filter(!is.na(estimate)) %>%
   summarise(NumStations = length(unique(Name)))
 ```
@@ -280,24 +484,26 @@ write.csv(bikes.data.join.df,  file="../JohnsonFromuthCohen_ENV872_EDA_FinalProj
 
 
 ```{r race and bikes join and correlation}
-bike.variables.model <- lm(data=bikes.data.join, NumStations ~ perwhite + per.homeowner + per.public)
+bike.variables.model <- lm(data=bikes.data.join, NumStations ~ perwhite + per.homeowner + per.public +carpool +drive_alone)
 summary(bike.variables.model)
-#R-squared of 0.1012, p-value 0.0001873
+#R-sqared 0.13 with per white, per homeowner, per.public, carpool, drive alone
+#R-square was lower when added onePrnt6to17(children6-17 with one parent) and PovChld6_17 (children 6-17 in poverty)
 
-
-
-Bikes.AIC.1 <- lm (data=bikes.data.join, NumStations ~ perwhite + per.homeowner + per.public + pernonwhite) 
+Bikes.AIC.1 <- lm (data=bikes.data.join, NumStations ~ perwhite + per.homeowner + per.public + carpool + drive_alone) 
 step(Bikes.AIC.1)
 
-Bikes.AIC.2 <- lm (data=bikes.data.join, NumStations ~ perwhite + per.homeowner + per.public ) 
+Bikes.AIC.2 <- lm (data=bikes.data.join, NumStations ~ perwhite + per.homeowner + per.public + carpool ) 
 step(Bikes.AIC.2)
 #<none> is first here 
 
-Bikes.AIC.3 <-  lm (data=bikes.data.join, NumStations ~ pernonwhite + per.homeowner + per.public ) 
+Bikes.AIC.3 <-  lm (data=bikes.data.join, NumStations ~ pernonwhite + per.homeowner + per.public + PovChld6_17) 
 step(Bikes.AIC.3)
 
 Bikes.AIC.4 <- lm (data=bikes.data.join, NumStations ~  per.homeowner + per.public ) 
 step(Bikes.AIC.4)
+
+Bikes.AIC.5 <- lm (data=bikes.data.join, NumStations ~ perwhite + per.homeowner + per.public + carpool + PovChld6_17)
+step(Bikes.AIC.5)
 
 ```
 
