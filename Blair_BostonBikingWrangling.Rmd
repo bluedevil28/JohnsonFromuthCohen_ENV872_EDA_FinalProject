@@ -259,15 +259,15 @@ census.data.joined <-cbind(homeowner.join, public.transit.join, income.join, rac
 census.data.joined <- select(census.data.joined, -NAME.1, -NAME.2, -NAME.3)
 
 
-
 bikes.data.join <- census.data.joined %>%
   select(NAME, Name, perwhite, pernonwhite, per.homeowner, per.public, estimate) %>%
   group_by(NAME, perwhite, pernonwhite, per.homeowner, per.public) %>%
    #filter(!is.na(estimate)) %>%
-  summarise(NumStations = length(unique(Name))) 
+  summarise(NumStations = length(unique(Name)))
+```
 
 
-
+```{r race and bikes join and correlation}
 #WRITE CSV 
 
 bikes.data.join.df <- as.data.frame(bikes.data.join)
@@ -275,17 +275,23 @@ bikes.data.join.df <- as.data.frame(bikes.data.join)
 write.csv(bikes.data.join.df,  file="../JohnsonFromuthCohen_ENV872_EDA_FinalProject/Data_Processed/Bikes.Census.Data.csv")
 
 
-#RUN TO SEE AICS  
+#RUN TO SEE AICS
+```
 
 
+```{r race and bikes join and correlation}
 bike.variables.model <- lm(data=bikes.data.join, NumStations ~ perwhite + per.homeowner + per.public)
 summary(bike.variables.model)
+#R-squared of 0.1012, p-value 0.0001873
+
+
 
 Bikes.AIC.1 <- lm (data=bikes.data.join, NumStations ~ perwhite + per.homeowner + per.public + pernonwhite) 
 step(Bikes.AIC.1)
 
 Bikes.AIC.2 <- lm (data=bikes.data.join, NumStations ~ perwhite + per.homeowner + per.public ) 
 step(Bikes.AIC.2)
+#<none> is first here 
 
 Bikes.AIC.3 <-  lm (data=bikes.data.join, NumStations ~ pernonwhite + per.homeowner + per.public ) 
 step(Bikes.AIC.3)
@@ -298,8 +304,5 @@ step(Bikes.AIC.4)
 
 ```
 
-```{r}
-
-```
 
 
