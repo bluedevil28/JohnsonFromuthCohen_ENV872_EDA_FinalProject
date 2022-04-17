@@ -39,8 +39,13 @@ library(tidyr)
 ```
 
 ```{r load bike data}
+<<<<<<< HEAD:Jeff_BostonBikingWrangling.Rmd
 Bikes.2021 <- read.csv("./Data/Blue_Bike_Stations.csv", stringsAsFactors = TRUE)
 #getwd()
+=======
+Bikes.2021 <- read.csv("../JohnsonFromuthCohen_ENV872_EDA_FinalProject/Data_Raw/Blue_Bike_Stations_2021.csv", stringsAsFactors = TRUE)
+
+>>>>>>> 5bd15e0fa861bc200056f155dec857b7dab6ea38:Blair_BostonBikingWrangling.Rmd
 Bikes.2021 <- Bikes.2021 %>%
       filter(District=="Boston")
 ```
@@ -56,13 +61,11 @@ Bikes.2021.sf <- Bikes.2021 %>%
 #Get key
 census_api_key('111339232f4137ed330544649d9c1c65d82c047c', `install=TRUE`)
 
-#census.data <-read.csv("boston_census.csv")
-
 #Get ACS variables 
 v20 <- load_variables(2020, "acs5", cache = TRUE)
-#View(v20)
+View(v20)
 
-ma_children <- get_acs(
+ma.suffolk.children <- get_acs(
   geography = "tract", 
   variables = c(ownchildren= "B09002_001" 
                 ),  
@@ -72,9 +75,9 @@ ma_children <- get_acs(
   county = "Suffolk"
 )
 
-ma_traveltime <- get_acs(
+ma.suffolk.public.transport <- get_acs(
   geography = "tract", 
-  variables = c(fifteen.min = "B08135_003" 
+  variables = c(means.transport.total= "B08301_001", public.transport = "B08301_010"
                 ),  
   state = "MA", 
   geometry = TRUE,
@@ -97,7 +100,7 @@ ma_married_couples.children <- get_acs(
 
 
 #census tract data for income
-ma_suffolk.income <- get_acs(
+ma.suffolk.income <- get_acs(
   geography = "tract", 
   variables = c(medIncome= "B19013_001" 
                 ),  
@@ -108,9 +111,9 @@ ma_suffolk.income <- get_acs(
 )
 
 #census tract data for race 
-ma_suffolk.race <- get_acs(
+ma.suffolk.race <- get_acs(
   geography = "tract", 
-  variables = c(white= "B03002_003" , totpop = "B03002_001", black = "B03002_004"
+  variables = c(white= "B03002_003" , totpop = "B03002_001"
                 ),  
   state = "MA", 
   geometry = TRUE,
@@ -255,6 +258,16 @@ ma_suffolk.carpoolcmte <- ma_suffolk.carpoolcmte %>%
          GEOID != "25025990101", GEOID != "25025080801", 
          GEOID != "25025981100")
 
+#Homeowners 
+ma.suffolk.homeowner <- get_acs(
+  geography = "tract", 
+  variables = c(total.homes = "B25118_001", homeowner= "B25118_002"
+  ), 
+  state = "25025", 
+  county = "025",
+  year = 2020, 
+  geometry = TRUE
+)
 
 ma_suffolk.pubTr <- ma_suffolk.pubTr %>% 
       #filter(GEOID %in% census_tracts$GEOID20) %>%
@@ -308,24 +321,27 @@ ma_suffolk.chld6_17OnePrnt <- ma_suffolk.chld6_17OnePrnt %>%
 census_tracts <- st_read(
     "../JohnsonFromuthCohen_ENV872_EDA_FinalProject/Census2020_Tracts/Census2020_Tracts.shp")
 
-ma_suffolk.income <- ma_suffolk.income %>% 
+ma.boston.income <- ma.suffolk.income %>% 
       filter(GEOID %in% census_tracts$GEOID20) %>%
       filter(GEOID != "25025981202", GEOID != "25025981800", GEOID != "25025981300",
          GEOID != "25025990101", GEOID != "25025080801", 
          GEOID != "25025981100")
 
-ma_suffolk.race <- ma_suffolk.race %>% 
+ma.boston.race <- ma.suffolk.race %>% 
       filter(GEOID %in% census_tracts$GEOID20) %>%
       filter(GEOID != "25025981202", GEOID != "25025981800", GEOID != "25025981300",
          GEOID != "25025990101", GEOID != "25025080801", 
          GEOID != "25025981100")
 
-#ma_suffolk.labor.internet <- ma_suffolk.labor.internet %>% 
-#      filter(GEOID %in% census_tracts$GEOID20)
-
-ma_suffolk.wfh <- ma_suffolk.wfh %>% 
-      filter(GEOID %in% census_tracts$GEOID20) %>%
+ma.boston.public.transport <- ma.suffolk.public.transport %>%
+  filter(GEOID %in% census_tracts$GEOID20) %>%
       filter(GEOID != "25025981202", GEOID != "25025981800", GEOID != "25025981300",
+         GEOID != "25025990101", GEOID != "25025080801", 
+         GEOID != "25025981100")
+
+ma.boston.homeowner <- ma.suffolk.homeowner%>% 
+    filter(GEOID %in% census_tracts$GEOID20) %>%
+  filter(GEOID != "25025981202", GEOID != "25025981800", GEOID != "25025981300",
          GEOID != "25025990101", GEOID != "25025080801", 
          GEOID != "25025981100")
 
@@ -334,23 +350,20 @@ ma_suffolk.wfh <- ma_suffolk.wfh %>%
 ```{r}
 
 #Organize data by removing moe and adjusting variables from long to wide 
-ma_suffolk.race <-select(ma_suffolk.race, -moe
-                      )
 
-ma_suffolk.race.1<-spread(ma_suffolk.race, key=variable, value=estimate)
-ma_suffolk.race.1
+ma.boston.race <-select(ma.boston.race, -moe)
+
+ma.boston.race.1<-spread(ma.boston.race, key=variable, value=estimate)
+ma.boston.race.1
+
+ma.boston.public.transport<-select(ma.boston.public.transport, -moe)
+ma.boston.public.transport.1 <-spread(ma.boston.public.transport, key=variable, value=estimate)
+
+ma.boston.homeowner<-select(ma.boston.homeowner, -moe)
+ma.boston.homeowner.1 <- spread(ma.boston.homeowner, key=variable, value=estimate)
+ma.boston.homeowner.1
 
 
-#ma_suffolk.labor.internet.1 <-select(ma_suffolk.labor.internet, -moe
-#                      )
-
-#ma_suffolk.labor.internet.1<-spread(ma_suffolk.labor.internet, key=variable, value=estimate)
-#ma_suffolk.labor.internet
-
-
-ma_suffolk.wfh.1 <-select(ma_suffolk.wfh, -moe)
-
-ma_suffolk.wfh.1<-spread(ma_suffolk.wfh.1, key=variable, value=estimate)
 
 ```
 
@@ -395,10 +408,15 @@ ma_suffolk.allChld.1
 
 
 ```{r}
-
 #Calculate percentages 
-ma_suffolk.race.1 <- mutate(ma_suffolk.race.1, perwhite = white/totpop,
-                            perblack = black/totpop) 
+ma.boston.race.1 <- mutate(ma.boston.race.1, perwhite = white/totpop, pernonwhite = 1-perwhite)
+ma.boston.race.1
+
+ma.boston.public.transport.1 <- mutate(ma.boston.public.transport.1, per.public = public.transport/means.transport.total)
+
+ma.boston.homeowner.1 <- mutate(ma.boston.homeowner.1, per.homeowner =
+                           homeowner/total.homes)
+ma.boston.homeowner.1
 
 ma_suffolk.allVhc.1 <- mutate(ma_suffolk.allVhc.1, carpool = carpool/totpop,
                             drive_alone = drive_alone/totpop, public_transit = public_transit/totpop) 
@@ -412,6 +430,7 @@ ma_suffolk.allChld.1 <- mutate(ma_suffolk.allChld.1, workPrnts6to17 = workPrnts6
 ```{r}
 
 #Turn into shapefile 
+<<<<<<< HEAD:Jeff_BostonBikingWrangling.Rmd
 suffolk.allVhc.sf <- ma_suffolk.allVhc.1 %>% 
   st_as_sf(coords = c('geometry'),
            crs=4269)
@@ -433,37 +452,48 @@ ggplot(suffolk.allChld.sf) + geom_sf(aes(fill=PovChld6_17))
 
 #map percent white
 ggplot(suffolk.race.sf) + geom_sf(aes(fill=perwhite))
+=======
+boston.race.sf <- ma.boston.race.1 %>% 
+  st_as_sf(coords = c('geometry'),
+           crs=4269)
 
-#map percent black
-ggplot(suffolk.race.sf) + geom_sf(aes(fill=perblack))
-
-#map income
-ggplot(suffolk.income.sf) + geom_sf(aes(fill=estimate))
-
-#map labor force participation
-#ggplot(suffolk.labor.internet.sf) + geom_sf(aes(fill=perlaborforce))
-
-#map work from home
-ggplot(suffolk.wfh.sf) + geom_sf(aes(fill=workfromhome))
+boston.income.sf <- ma.boston.income %>% 
+  st_as_sf(coords = c('geometry'),
+           crs=4269)
 
 
-#Income and bike stations
-ggplot() + geom_sf(data=suffolk.income.sf, aes(fill=estimate)) + geom_sf(data=Bikes.2021.sf, aes(color="white", alpha = 0.4))
+boston.public.transit.sf <- ma.boston.public.transport.1 %>% 
+  st_as_sf(coords = c('geometry'),
+           crs=4269)
 
+boston.homeowner.sf <- ma.boston.homeowner.1 %>% 
+  st_as_sf(coords = c('geometry'),
+           crs=4269)
+>>>>>>> 5bd15e0fa861bc200056f155dec857b7dab6ea38:Blair_BostonBikingWrangling.Rmd
 
-#Race and bike stations
-ggplot() + geom_sf(data=suffolk.race.sf, aes(fill=perwhite)) + geom_sf(data=Bikes.2021.sf, aes(color="white", alpha = 0.4))
-
-#labor force participation and bike stations
-#ggplot() + geom_sf(data=suffolk.labor.internet.sf, aes(fill=perlaborforce)) + geom_sf(data=Bikes.2021.sf, #aes(color="white", alpha = 0.4))
-
-#work from home and bike stations
-ggplot() + geom_sf(data=suffolk.wfh.sf, aes(fill=workfromhome)) + geom_sf(data=Bikes.2021.sf, alpha = 0.4, color= "white") + labs(fill="Number of Residents Working Remotely", title = "Bike Stations and Remote Work") + theme(axis.text.x = element_text(angle=45, vjust=0.5, hjust = 1))
-
-mapview(suffolk.income.sf, zcol = 'estimate') 
 
 ```
 
+```{r mapping, add to exploratory analysis RMD}
+
+#map race bike stations (white)
+ggplot(boston.race.sf) + geom_sf(aes(fill=perwhite)) + geom_sf(data=Bikes.2021.sf, aes(color="white", alpha = 0.4))
+
+
+#map income
+ggplot(boston.income.sf) + geom_sf(aes(fill=estimate)) + geom_sf(data=Bikes.2021.sf, aes(color="white", alpha = 0.4))
+
+
+#Race and bike stations  (non white)
+ggplot() + geom_sf(data=boston.race.sf, aes(fill=pernonwhite)) + geom_sf(data=Bikes.2021.sf, aes(color="white", alpha = 0.4))
+
+
+#work from home and bike stations
+ggplot(boston.homeowner.sf) + geom_sf(aes(fill=per.homeowner)) + geom_sf(data=Bikes.2021.sf, aes(color="white", alpha = 0.4))
+
+```
+
+<<<<<<< HEAD:Jeff_BostonBikingWrangling.Rmd
 ```{r vehilces and bikes join and correlation}
 #joining vehicle options and bikes
 Vhc.join <- st_join(x = suffolk.allVhc.sf, y = Bikes.2021.sf, 
@@ -500,95 +530,44 @@ summary(Children.bikes.correlation)
 ```{r wfh joining and correlation}
 #joining home ownership and bikes
 WFH.join <- st_join(x = suffolk.wfh.sf, y = Bikes.2021.sf, 
+=======
+```{r race and bikes join and correlation}
+#joining race and bikes
+race.join <- st_join(x = boston.race.sf, y = Bikes.2021.sf, 
                                join = st_intersects)
 
-Bikes.WFH.processed <- WFH.join %>%
-  group_by(NAME, workfromhome, GEOID) %>%
-  summarise(BikeDocks = sum(Total_docks),
-            NumStations = length(unique(Number)))
-
-WFH.bikes.correlation <- lm(data=Bikes.WFH.processed , NumStations ~ workfromhome )
-summary(WFH.bikes.correlation)
-#R-squared 0.001843, p-value 0.5441. Not statistically significant -VERY large p value!  
-
-cor.test(Bikes.WFH.processed$NumStations, Bikes.WFH.processed$workfromhome)
-#Correlation coefficient is 0.0429. Correlation is very weak (practically none)
-
-```
-
-
-
-##homeownership (absolute) 
-```{r Homeownership absolute}
-
-boston_HMO <- get_acs(
-  geography = "tract", 
-  variables = "B25118_002E",
-  state = "25025", 
-  county = "025",
-  geometry = TRUE
-)
-
-plot(boston_HMO["estimate"]) 
-
-```
-
-##total homes (absolute) 
-```{r Total homes absolute}
-
-boston_Htot <- get_acs(
-  geography = "tract", 
-  variables = "B25118_001E",
-  state = "25025", 
-  county = "025",
-  geometry = TRUE
-  
-)
-```
-
-#Mutate data and create percentages 
-```{r mutate home data and plot}
-
-bostonmerge <- cbind(boston_HMO,boston_Htot)
-
-boston_HMOpr <- 
-  bostonmerge %>% 
-  filter(GEOID != "25025981202", GEOID != "25025981800", GEOID != "25025981300",
-         GEOID != "25025990101", GEOID != "25025080801", 
-         GEOID != "25025981100")%>%
-  select(GEOID, NAME, variable, estimate, estimate.1, geometry) %>%
-  mutate(percentHMO = (estimate/estimate.1))
-  
-plot(boston_HMOpr["percentHMO"])
-```
-
-```{r ggplot home data}
-
-ggplot() + 
-  geom_sf(data=boston_HMOpr_sf, aes(fill=percentHMO)) + geom_sf(data=Bikes.2021.sf, alpha = 0.4, color= "white") + labs(fill="Percent of Homeowners", title = "Bike Stations and Homeownership") + theme(axis.text.x = element_text(angle=45, vjust=0.5, hjust = 1))
-
-boston_HMOpr_sf <- boston_HMOpr %>% 
-  st_as_sf(coords = c('SITE_LONGITUDE','SITE_LATITUDE'), crs=4269)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
-```{r Home ownership and bikes joining and regression}
-
-#joining home ownership and bikes
-HMO.join <- st_join(x = boston_HMOpr_sf, y = Bikes.2021.sf, 
+income.join<-st_join(x = boston.income.sf, y = Bikes.2021.sf, 
+>>>>>>> 5bd15e0fa861bc200056f155dec857b7dab6ea38:Blair_BostonBikingWrangling.Rmd
                                join = st_intersects)
 
-Bikes.HMO <- HMO.join %>%
-  group_by(NAME, percentHMO, GEOID) %>%
+
+public.transit.join<-st_join(x = boston.public.transit.sf, y = Bikes.2021.sf, 
+                               join = st_intersects)
+
+
+homeowner.join<-st_join(x = boston.homeowner.sf, y = Bikes.2021.sf, 
+                               join = st_intersects)
+
+census.data.joined <-cbind(homeowner.join, public.transit.join, income.join, race.join)
+
+#Calculating number of stations in tract, for some reason there are duplicates of a census tract 
+Bikes.data.join <- census.data.joined %>%
+  group_by(NAME, perwhite, pernonwhite, per.homeowner, per.public, estimate,  GEOID) %>%
   summarise(BikeDocks = sum(Total_docks),
-            NumStations = length(unique(Number)))
+    NumStations = length(unique(Number)))
 
-HMO.bikes.correlation <- lm(data=Bikes.HMO, NumStations ~ percentHMO )
-summary(HMO.bikes.correlation)
-#R-squared 0.028391, p-value 0.02046 (<0.05) statistically significant? 
 
-cor.test(Bikes.HMO$NumStations, Bikes.HMO$percentHMO)
-#Correlation coefficient is -0.1685048. Correlation is weak but negative 
+#WRITE CSV 
+
+
+#ADD CORRELATIONS TO ANALYSIS RMD 
+race.bikes.correlation <- lm(data=Bikes.race.join, NumStations ~ perblack )
+summary(race.bikes.correlation)
+#R-squared 0.02771, p-value 0.08221. Not statistically significant  
+
+
+
+```
 
 
 ```
