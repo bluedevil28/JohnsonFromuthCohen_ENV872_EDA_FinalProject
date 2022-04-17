@@ -255,21 +255,43 @@ homeowner.join<-st_join(x = boston.homeowner.sf, y = Bikes.2021.sf,
 census.data.joined <-cbind(homeowner.join, public.transit.join, income.join, race.join)
 
 #Calculating number of stations in tract, for some reason there are duplicates of a census tract 
-Bikes.data.join <- census.data.joined %>%
-  group_by(NAME, perwhite, pernonwhite, per.homeowner, per.public, estimate,  GEOID) %>%
-  summarise(BikeDocks = sum(Total_docks),
-    NumStations = length(unique(Number)))
+
+census.data.joined <- select(census.data.joined, -NAME.1, -NAME.2, -NAME.3)
+
+
+
+bikes.data.join <- census.data.joined %>%
+  select(NAME, Name, perwhite, pernonwhite, per.homeowner, per.public, estimate) %>%
+  group_by(NAME, perwhite, pernonwhite, per.homeowner, per.public) %>%
+   #filter(!is.na(estimate)) %>%
+  summarise(NumStations = length(unique(Name))) 
+
 
 
 #WRITE CSV 
 
+bikes.data.join.df <- as.data.frame(bikes.data.join)
 
-#ADD CORRELATIONS TO ANALYSIS RMD 
-race.bikes.correlation <- lm(data=Bikes.race.join, NumStations ~ perblack )
-summary(race.bikes.correlation)
-#R-squared 0.02771, p-value 0.08221. Not statistically significant  
+write.csv(bikes.data.join.df,  file="../JohnsonFromuthCohen_ENV872_EDA_FinalProject/Data_Processed/Bikes.Census.Data.csv")
 
 
+#RUN TO SEE AICS  
+
+
+bike.variables.model <- lm(data=bikes.data.join, NumStations ~ perwhite + per.homeowner + per.public)
+summary(bike.variables.model)
+
+Bikes.AIC.1 <- lm (data=bikes.data.join, NumStations ~ perwhite + per.homeowner + per.public + pernonwhite) 
+step(Bikes.AIC.1)
+
+Bikes.AIC.2 <- lm (data=bikes.data.join, NumStations ~ perwhite + per.homeowner + per.public ) 
+step(Bikes.AIC.2)
+
+Bikes.AIC.3 <-  lm (data=bikes.data.join, NumStations ~ pernonwhite + per.homeowner + per.public ) 
+step(Bikes.AIC.3)
+
+Bikes.AIC.4 <- lm (data=bikes.data.join, NumStations ~  per.homeowner + per.public ) 
+step(Bikes.AIC.4)
 
 ```
 
