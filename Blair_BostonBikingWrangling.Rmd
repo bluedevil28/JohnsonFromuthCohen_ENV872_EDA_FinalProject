@@ -311,7 +311,7 @@ ma.boston.chld6_17OnePrnt <- ma.suffolk.chld6_17OnePrnt %>%
          GEOID != "25025990101", GEOID != "25025080801", 
          GEOID != "25025981100")
 
-ma.boston.allVhc <- ma_suffolk.allVhc %>% 
+ma.boston.allVhc <- ma.suffolk.allVhc %>% 
       filter(GEOID %in% census_tracts$GEOID20) %>%
       filter(GEOID != "25025981202", GEOID != "25025981800", GEOID != "25025981300",
          GEOID != "25025990101", GEOID != "25025080801", 
@@ -343,7 +343,7 @@ ma.boston.homeowner<-select(ma.boston.homeowner, -moe)
 ma.boston.homeowner.1 <- spread(ma.boston.homeowner, key=variable, value=estimate)
 ma.boston.homeowner.1
 
-
+ma.boston.allVhc <- select(ma.boston.allVhc, -moe)
 
 ma.boston.allVhc.1<-spread(ma.boston.allVhc, key=variable, value=estimate)
 ma.boston.allVhc.1
