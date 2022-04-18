@@ -41,7 +41,9 @@ mainfont: Times New Roman
 
 # Dataset Information
 
-
+```{r}
+dataset.column.1 <- c("City of Boston")
+```
 
 \newpage
 
