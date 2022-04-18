@@ -423,7 +423,7 @@ ggplot(boston.income.sf) + geom_sf(aes(fill=estimate)) + geom_sf(data=Bikes.2021
 ggplot() + geom_sf(data=boston.race.sf, aes(fill=pernonwhite)) + geom_sf(data=Bikes.2021.sf, aes(color="white", alpha = 0.4))
 
 
-#work from home and bike stations
+#Homeownership and bike stations
 ggplot(boston.homeowner.sf) + geom_sf(aes(fill=per.homeowner)) + geom_sf(data=Bikes.2021.sf, aes(color="white", alpha = 0.4))
 
 ```
