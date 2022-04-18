@@ -486,7 +486,7 @@ write.csv(bikes.data.join.df,  file="../JohnsonFromuthCohen_ENV872_EDA_FinalProj
 ```{r race and bikes join and correlation}
 bike.variables.model <- lm(data=bikes.data.join, NumStations ~ perwhite + per.homeowner + per.public +carpool +drive_alone)
 summary(bike.variables.model)
-#R-sqared 0.13 with per white, per homeowner, per.public, carpool, drive alone
+#R-squared 0.13 with per white, per homeowner, per.public, carpool, drive alone
 #R-square was lower when added onePrnt6to17(children6-17 with one parent) and PovChld6_17 (children 6-17 in poverty)
 
 Bikes.AIC.1 <- lm (data=bikes.data.join, NumStations ~ perwhite + per.homeowner + per.public + carpool + drive_alone) 
