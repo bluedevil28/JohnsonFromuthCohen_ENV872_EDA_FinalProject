@@ -39,13 +39,12 @@ library(tidyr)
 ```
 
 ```{r load bike data}
-<<<<<<< HEAD:Jeff_BostonBikingWrangling.Rmd
 Bikes.2021 <- read.csv("./Data/Blue_Bike_Stations.csv", stringsAsFactors = TRUE)
 #getwd()
-=======
+
 Bikes.2021 <- read.csv("../JohnsonFromuthCohen_ENV872_EDA_FinalProject/Data_Raw/Blue_Bike_Stations_2021.csv", stringsAsFactors = TRUE)
 
->>>>>>> 5bd15e0fa861bc200056f155dec857b7dab6ea38:Blair_BostonBikingWrangling.Rmd
+
 Bikes.2021 <- Bikes.2021 %>%
       filter(District=="Boston")
 ```
@@ -85,7 +84,7 @@ ma.suffolk.public.transport <- get_acs(
   county = "Suffolk"
 )
 
-#
+
 
 #B11003_005, Estimate!!Total:!!Married-couple family:!!With own children of the householder under 18 years:!!Under 6 years and 6 to 17 years
 ma_married_couples.children <- get_acs(
@@ -139,7 +138,7 @@ ma_suffolk.carpool <- get_acs(
 
 #Estimate!!commuting to work 16 y and over, car, truck, or van carpooled
 
-ma_suffolk.carpoolcmte <- get_acs(
+ma.suffolk.carpoolcmte <- get_acs(
   geography = "tract",
   variables = c(cmteCarpool = "DP03_0020E"
                 ),
@@ -436,7 +435,6 @@ ma_suffolk.allChld.1 <- mutate(ma_suffolk.allChld.1, workPrnts6to17 = workPrnts6
 ```{r}
 
 #Turn into shapefile 
-<<<<<<< HEAD:Jeff_BostonBikingWrangling.Rmd
 suffolk.allVhc.sf <- ma_suffolk.allVhc.1 %>% 
   st_as_sf(coords = c('geometry'),
            crs=4269)
@@ -458,7 +456,8 @@ ggplot(suffolk.allChld.sf) + geom_sf(aes(fill=PovChld6_17))
 
 #map percent white
 ggplot(suffolk.race.sf) + geom_sf(aes(fill=perwhite))
-=======
+
+
 boston.race.sf <- ma.boston.race.1 %>% 
   st_as_sf(coords = c('geometry'),
            crs=4269)
@@ -475,7 +474,6 @@ boston.public.transit.sf <- ma.boston.public.transport.1 %>%
 boston.homeowner.sf <- ma.boston.homeowner.1 %>% 
   st_as_sf(coords = c('geometry'),
            crs=4269)
->>>>>>> 5bd15e0fa861bc200056f155dec857b7dab6ea38:Blair_BostonBikingWrangling.Rmd
 
 
 ```
