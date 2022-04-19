@@ -97,7 +97,9 @@ names(Data.table) <- c("Data Sources", "Variables Used", "Time Period")
 
 
 knitr::kable(Data.table, 
-             caption = "Dataset Information")
+             caption = "Dataset Information", table.attri ="style='width:50%;") 
+  
+ 
 ```
 
 
@@ -128,7 +130,7 @@ bikes.data.join.sf <- st_read(
 
 ```
 
-=======
+
 ## *Figure 1* 
 ```{r develop plots race non-white, fig.align= 'left', echo= FALSE}
 #Race and bike stations  (non white)
@@ -243,7 +245,7 @@ plot5
 
 ## Question: Are bike sharing stations in Boston equally available across population groups?
 
-After mapping the most salient equity-related variables against the locations of bike stations in Boston, we parsed and prepared the other variables we had selected to be included in a General Linear Model (GLM).  We put all the variables in one dataset and used an Akaike Information Criterion (AIC) call in R to isolate the variables that would best contribute to a robust combined regression.  Then, we ran a regression and built a GLM with the strongest variables from the batch we had chosen.  The variables with significance in our final regression were the percentages of people who use public transit to commute to work, and who commute to work by driving alone in a personal vehicle.  It is worth noting, though, that the R-Squared values of our regression were low—0.1293 for the Multiple R-Squared and 0.1055 for the Adjusted R-Squared—so the proportion of the variation in the locations of bike stations around Boston that is explained with our selected variables is low.
+After mapping the most salient equity-related variables against the locations of bike stations in Boston, we parsed and prepared the other variables we had selected to be included in a General Linear Model (GLM).  We put all the variables in one dataset and used an Akaike Information Criterion (AIC) call in R to isolate the variables that would best contribute to a robust combined regression.  Then, we ran a regression and built a GLM with the strongest variables from the batch we had chosen.  The variables with significance in our final regression were the percentages of people who use public transit to commute to work, and who commute to work by driving alone in a personal vehicle.  It is worth noting, though, that the R-Squared values of our regression were low— 0.1129 for the Multiple R-Squared and 0.08865 for the Adjusted R-Squared—so the proportion of the variation in the locations of bike stations around Boston that is explained with our selected variables is low.
 
 
 ## *Figure 8*
@@ -264,7 +266,6 @@ plot6
 \newpage
 # Analysis
 
-=======
 After mapping the most salient equity-related variables against the locations of bike stations in Boston, we parsed and prepared the other variables we had selected to be included in a General Linear Model (GLM). We put all the variables in one dataset and used an Akaike Information Criterion (AIC) call in R to isolate the variables that would best contribute to a robust combined regression.  Then, we ran a regression and built a GLM with the strongest variables from the batch we had chosen.  The variables with significance in our final regression were the percentages of people who use public transit to commute to work, and who commute to work by driving alone in a personal vehicle.  It is worth noting, though, that the R-Squared values of our regression were low—0.1293 for the Multiple R-Squared and 0.1055 for the Adjusted R-Squared—so the proportion of the variation in the locations of bike stations around Boston that is explained with our selected variables is low.
 
 
@@ -273,22 +274,25 @@ After mapping the most salient equity-related variables against the locations of
 
 # Summary and Conclusions
 
-## 5.1 Expected distribution inequity absent
+## Expected distribution inequity absent
 
 In a typical example of a statistic representing whether bike sharing programs have been successful in reaching across user groups, one study found that in New York City, only 16.5% of people of color have access to Citi Bike, the city’s bike sharing program (Pitt 2019).  The literature also finds that the people who are likeliest to bike to work are young urban dwellers (US Census Bureau 2019), and “super-users” are more likely to be young, have household incomes below $75,000, and live and work near bike share stations (Winters et al. 2019).  Our team expected to find similar results in Boston, another city that has experienced gentrification and the stratification of available amenities by socio-economic class and race.  We did not find such results: both from the visual and the statistical perspective, demographic variables like income, race, and age do not have much to do with where bike share stations are in Boston.  These findings could be because the barriers to participation that we imagined are not the ones that apply.  A different obstacle could be perceptions of cycling safety, although riding a bike from a bike sharing program can be even safer than riding a personal bike (Walker 2019).  For another idea, one author posits that lack of information, not access, is what makes bike share programs skew white and wealthy in many places (Schneider 2017)—in other words, many people just don’t know enough about bike sharing programs to be comfortable taking advantage of them, despite their ready availability near where people live.
 
-## 5.2 Alternate commute modes negatively correlate with Boston bike station locations
+## Alternate commute modes negatively correlate with Boston bike station locations
 
 The variables that were significant in our regression of Boston bike station locations were the proportion of people who commute to work via public transit, and the portion who drive to work alone in a private car.  For both variables, the coefficient in the regression was negative: -2.3935 at p = 0.00418 for public transit commuters, and  -3.0081 at p = 0.01550  for those who drive to work in cars by themselves.  Our model shows that the more people there are in a given census tract who commute to work either alone in personal vehicles or by public transit, the lower number of bike stations found in that census tract.  This finding is not what we ancticipated: we posited that there would be a bundling of pro-environment indicators--more people using environmentally friendly commuting methods like public transit correlating with more bike stations available for people to use for errands, recreation, or commuting.  Instead, the two significant variables in the regression point in opposite directions: fewer bike stations as more people commute to work alone in private cars (the bundling we expected), but also fewer bike stations as more people commute to work using public transit (not the bundling we expected).  Perhaps the locations of Boston bike stations are irrespective of population characteristics altogether, and instead track other elements of the city, such as areas that are most popular with tourists.  Also, the dataset we used for carpooling behavior was much smaller than we had hoped, raising the question of whether its sample size is sufficiently large to merit statistical confidence in the associated findings.
 
 The larger environmental context around bike sharing programs asks whether these programs reduce the number of miles that urban residents drive, as people switch between driving and other modes of transport for their daily activities.  Considering transportation is responsible for 27% of 2020 GHG emissions in US (EPA 2022), this question is an urgent one.  Bike share programs have been found to reduce car use in some cities, but not all—and the effectiveness of bike share programs in protecting the environment is “dependent on whether [these programs replace] car use” (Fishman et al. 2014).  With that said, bike share programs are most effective at curbing GHGs when they catalyze other changes, like increases in private bike use, improvements to bicycle infrastructure, and support of other policies that facilitate cycling (Schmidt 2018).
 =======
 
-## 5.2 Alternate commute modes negatively correlate with Boston bike station locations
+## Alternate commute modes negatively correlate with Boston bike station locations
 
-The variables that were significant in our regression of Boston bike station locations were the proportion of people who commute to work via public transit, and the portion who drive to work alone in a private car.  For both variables, the coefficient in the regression was negative: -2.3843 at p = 0.000332 for public transit commuters, and -2.1573 at p = 0.027758 for those who drive to work in cars by themselves.  Our model shows that the more people there are in a given census tract who commute to work either alone in personal vehicles or by public transit, the lower number of bike stations found in that census tract.  This finding is not what we anticipated: we posited that there would be a bundling of pro-environment indicators--more people using environmentally friendly commuting methods like public transit correlating with more bike stations available for people to use for errands, recreation, or commuting.  Instead, the two significant variables in the regression point in opposite directions: fewer bike stations as more people commute to work alone in private cars (the bundling we expected), but also fewer bike stations as more people commute to work using public transit (not the bundling we expected).  Perhaps the locations of Boston bike stations are irrespective of population characteristics altogether, and instead track other elements of the city, such as areas that are most popular with tourists.  Also, the dataset we used for carpooling behavior was much smaller than we had hoped, raising the question of whether its sample size is sufficiently large to merit statistical confidence in the associated findings.
+The variables that were significant in our regression of Boston bike station locations were the proportion of people who commute to work via public transit, and the portion who drive to work alone in a private car.  For both variables, the coefficient in the regression was negative: -2.3843 at p = 0.000332 for public transit commuters, and -2.1573 at p = 0.027758 for those who drive to work in cars by themselves (Table 2).  Our model shows that the more people there are in a given census tract who commute to work either alone in personal vehicles or by public transit, the lower number of bike stations found in that census tract.  This finding is not what we anticipated: we posited that there would be a bundling of pro-environment indicators--more people using environmentally friendly commuting methods like public transit correlating with more bike stations available for people to use for errands, recreation, or commuting.  Instead, the two significant variables in the regression point in opposite directions: fewer bike stations as more people commute to work alone in private cars (the bundling we expected), but also fewer bike stations as more people commute to work using public transit (not the bundling we expected).  Perhaps the locations of Boston bike stations are irrespective of population characteristics altogether, and instead track other elements of the city, such as areas that are most popular with tourists.  Also, the dataset we used for carpooling behavior was much smaller than we had hoped, raising the question of whether its sample size is sufficiently large to merit statistical confidence in the associated findings.
 
 ```{r echo=FALSE}
+
+results.variables<-c("Percent White", "Percent Homeowner", "Percent taking public transport", "Percent carpooling", "Percent driving alone")
+results.variables <-as.data.frame(results.variables)
 
 results.estimates <- c("0.2409", "-0.7069", "-2.3935", "-0.8204", "-3.0081" )
 results.estimates <-as.data.frame(results.estimates)
@@ -309,17 +313,17 @@ knitr::kable(Results.data.table,
 
 
 =======
-5.2 Alternate commute modes correlate with Boston bike station locations
+## Alternate commute modes correlate with Boston bike station locations
 
-The variables that were significant in our regression of where Boston bike stations are were those who commute to work via public transit, and those who drive to work alone in a private vehicle.  For both variables, the coefficient in the regression was negative: -2.3935 at p = 0.00418 for public transit commuters, and -3.0081 at p = 0.01550 for those who drive to work in cars by themselves.  Our regression tells us that those living nearer to bike stations are likelier to commute to work by public transit and less likely to commute to work alone in personal vehicles, but this relationship is a measure of correlation, not causation: the regression cannot prove a relationship with directionality between the variables.  The larger environmental context around bike sharing programs asks whether these programs reduce the number of miles that urban residents drive, as people switch between driving and other modes of transport for their daily activities.  Considering transportation is responsible for 27% of 2020 GHG emissions in US (EPA 2022), this question is an urgent one.  Bike share programs have been found to reduce car use in some cities, but not all—and the effectiveness of bike share programs in protecting the environment is “dependent on whether [these programs replace] car use” (Fishman et al. 2014).  With that said, bike share programs are most effective at curbing GHGs when they catalyze other changes, like increases in private bike use, improvements to bicycle infrastructure, and support of other policies that facilitate cycling (Schmidt 2018).
+The variables that were significant in our regression of where Boston bike stations are were those who commute to work via public transit, and those who drive to work alone in a private vehicle.  For both variables, the coefficient in the regression was negative: -2.3935 at p = 0.00418 for public transit commuters, and -3.0081 at p = 0.01550 for those who drive to work in cars by themselves. Our regression tells us that those living nearer to bike stations are likelier to commute to work by public transit and less likely to commute to work alone in personal vehicles, but this relationship is a measure of correlation, not causation: the regression cannot prove a relationship with directionality between the variables. The larger environmental context around bike sharing programs asks whether these programs reduce the number of miles that urban residents drive, as people switch between driving and other modes of transport for their daily activities.  Considering transportation is responsible for 27% of 2020 GHG emissions in US (EPA 2022), this question is an urgent one.  Bike share programs have been found to reduce car use in some cities, but not all—and the effectiveness of bike share programs in protecting the environment is “dependent on whether [these programs replace] car use” (Fishman et al. 2014).  With that said, bike share programs are most effective at curbing GHGs when they catalyze other changes, like increases in private bike use, improvements to bicycle infrastructure, and support of other policies that facilitate cycling (Schmidt 2018).
 
-## 5.3 Limitations
+## Limitations
 
 The data we used is from the 5-year estimate from 2016-2019; therefore, this estimate primarily includes data from before the COVID-19 pandemic struck.  Usage patterns have certainly changed since the pandemic—in some temporary, and some likely permanent, ways—and in fact there have been analyses performed on these changes.  Because our analysis sought to investigate the baseline structure of the system, we worked with data from before the pandemic, but COVID-19 has transformed our society forever, so those changes are important to consider in future planning efforts.
 
 Over the course our project, we encountered two primary analytical difficulties.  The first was comparing results across regressions.  A given independent variable might be significant in one regression and not significant in the other, even though the dependent variable of bike station locations was the same between both models.  We could understand how the coefficient and significance might vary based on the other variables in the model, but it did not make sense to us that a variable that was statistically significant in one analysis could wholly drop from the statistically significant view in another model with the same outcome variable.  The other analytical issue we faced was the types of variables available to us.  The tidycensus package allows users to access and analyze the Census data quickly and easily, but it doesn’t, of course, change what kinds of variables the Census includes.  Even with our fairly wide distribution of variables, we still only explained about 10% of the variation in bike station locations in Boston.  With more kinds of variables—say about land use types, business openings and closures, or consumer expenditures—we might capture more of the dynamics that help determine where these bike share stations get built.
 
-## 5.4 Future Recommendations
+## Future Recommendations
 
 As alluded to above, the first area we recommend future research target is incorporating other Census datasets and variables into this same type of analysis.  Surveys of capital expenditures, retail trade, business formation and closures, and consumer expenditures could help illuminate the value flows in Boston that shape policymakers and developers perceptions and plans.
 
