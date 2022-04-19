@@ -14,15 +14,8 @@ mainfont: Times New Roman
 ---
 
 \newpage
-\tableofcontents 
-\newpage
-\listoftables 
-\newpage
-\listoffigures 
-\newpage
 
 ```{r setup, include=FALSE}
-# Set your working directory
 
 # Load your packages
 
@@ -42,7 +35,6 @@ library(tidyr)
 library(viridis)
 library(cowplot)
 
-
 # Set your ggplot theme
 mytheme <- theme_classic(base_size = 14) +
   theme(axis.text = element_text(color = "black"), 
@@ -50,6 +42,7 @@ mytheme <- theme_classic(base_size = 14) +
 theme_set(mytheme)
 
 # Load your datasets
+
 
 ```
 
@@ -60,14 +53,13 @@ In the era of the climate crisis, the race is on to find ways to reduce the gree
 
 As with any other new amenity, it is worth scrutinizing how and where a given municipality with bike sharing chooses to make that amenity available.  For our study, we chose to investigate the siting of bike-sharing stations in Boston.  The Census data offered thousands of variables, of which we selected several: demographic, including family size and race; financial, including homeownership status and income; and professional, including employment status and mode of commute to work.  For this analysis, we sought to determine whether the locations of bike-sharing stations in the city were related to the categories of people found across census tracts.  We chose Boston because its data availability was robust and all the members of our group have lived in or near Boston, and we focused on bike sharing programs because several group members are specifically interested in questions of equity and access in the world of transportation.  Public officials in Boston have also publicly expressed a desire to make bike sharing available to all, so our team wondered whether that sentiment was evident in the real locations of bike stations in the city.
 
-We chose the following question to anchor our inquiry:
-	1. Do the locations of bike sharing stations in Boston serve the needs of diverse user groups?
+We chose the following question to anchor our inquiry:\
+Do the locations of bike sharing stations in Boston serve the needs of diverse user groups?
 
 \newpage
 
 # Dataset Information
 
-=======
 2.1 Data Retrieval
 
 For this analysis, we used data from two different sources.  For population data in Boston, we accessed CSVs from the website of the United States Census, using the data from the 2016-2020 American Community Survey (ACS).  The ACS is conducted every year and is used to determine how hundreds of millions of state and federal funds are distributed annually (Census Bureau 2022).  For data on the locations of bike sharing stations in Boston, we downloaded shape files from the Blue Bikes Boston website.  To pull the Census data into R, we used a package called tidycensus (Walker 2019, Walker and Herman 2022, Moraga 2022) that allows for easy manipulation and quick visualizations.  The tidycensus package also allows the user to browse through the tens of thousands of variables encompassed by the ACS.  We added all of the data files to our project repository.  All data and code for this project can be retrieved from the GitHub repository.
@@ -115,9 +107,6 @@ Bikes.2021.sf2 <- st_read(
 bikes.data.join <- st_read(
  "../JohnsonFromuthCohen_ENV872_EDA_FinalProject/Data_Processed/bikes.data.join.shp") 
 
-
-#map income
-#ggplot(boston.income.sf2) + geom_sf(aes(fill=estimate)) + geom_sf(data=Bikes.2021.sf2, #aes(color="white", alpha = 0.4))
 ```
 
 ## *Figure 1* 
@@ -149,15 +138,6 @@ Racew.bikeplot <-
 Racew.bikeplot
 ```
 
-
-```{r display race and bike stations, include=FALSE, eval= FALSE}
-Race.legend<-get_legend(Racenw.bikeplot)
-Bike_plots <-plot_grid(Racew.bikeplot+theme(legend.position="none"),Racenw.bikeplot+theme(legend.position="none"), nrow=1,align='h')
-
-
-plot_grid(Bike_plots,Race.legend,nrow=2,rel_heights=c(2,0.5))
-
-```
 \newpage
 ## *Figures 3 and 4* 
 ```{r data scatterplots prnnwht, echo=FALSE, warning=FALSE}
@@ -230,25 +210,13 @@ plot5
 
 ```
 
-
-
-
-
 \newpage
 
 # Analysis
 
-
-
-## Question 1: <Are bike sharing stations in Boston widely available across population categories?
->
+## Question 1: Are bike sharing stations in Boston widely available across population categories?
 
 After mapping the most salient equity-related variables against the locations of bike stations in Boston, we parsed and prepared the other variables we had selected to be included in a General Linear Model (GLM).  We put all the variables in one dataset and used an Akaike Information Criterion (AIC) call in R to isolate the variables that would best contribute to a robust combined regression.  Then, we ran a regression and built a GLM with the strongest variables from the batch we had chosen.  The variables with significance in our final regression were the percentages of people who use public transit to commute to work, and who commute to work by driving alone in a personal vehicle.  It is worth noting, though, that the R-Squared values of our regression were low—0.1293 for the Multiple R-Squared and 0.1055 for the Adjusted R-Squared—so the proportion of the variation in the locations of bike stations around Boston that is explained with our selected variables is low.
-
-## Question 2: 
-
-
-
 
 \newpage
 
@@ -260,11 +228,17 @@ In a typical example of a statistic representing whether bike sharing programs h
 
 5.2 Alternate commute modes correlate with Boston bike station locations
 
-The variables that were significant in our regression of where Boston bike stations are were those who commute to work via public transit, and those who drive to work alone in a private vehicle.  For both variables, the coefficient in the regression was negative: -2.3843 at p = 0.000332 for public transit commuters, and -2.1573 at p = 0.027758 for those who drive to work in cars by themselves.  Our regression tells us that those living nearer to bike stations are likelier to commute to work by public transit and less likely to commute to work alone in personal vehicles, but this relationship is a measure of correlation, not causation: the regression cannot prove a relationship with directionality between the variables.  The larger environmental context around bike sharing programs asks whether these programs reduce the number of miles that urban residents drive, as people switch between driving and other modes of transport for their daily activities.  Considering transportation is responsible for 27% of 2020 GHG emissions in US (EPA 2022), this question is an urgent one.  Bike share programs have been found to reduce car use in some cities, but not all—and the effectiveness of bike share programs in protecting the environment is “dependent on whether [these programs replace] car use” (Fishman et al. 2014).  With that said, bike share programs are most effective at curbing GHGs when they catalyze other changes, like increases in private bike use, improvements to bicycle infrastructure, and support of other policies that facilitate cycling (Schmidt 2018).
+The variables that were significant in our regression of where Boston bike stations are were those who commute to work via public transit, and those who drive to work alone in a private vehicle.  For both variables, the coefficient in the regression was negative: -2.3843 at p = 0.000332 for public transit commuters, and -2.1573 at p = 0.027758 for those who drive to work in cars by themselves.  Our regression tells us that those living nearer to bike stations are less likely to commute to work by public transit or alone in personal vehicles, 
+
+-which is the opposite of what we expected (bundling of pro-environment behaviors)
+-maybe the location of bike stations is irrespective of population characteristics altogether and instead tracks e.g. tourist traps
+-dataset for carpooling behavior was too small to merit statistical confidence in the sample size
+
+.  The larger environmental context around bike sharing programs asks whether these programs reduce the number of miles that urban residents drive, as people switch between driving and other modes of transport for their daily activities.  Considering transportation is responsible for 27% of 2020 GHG emissions in US (EPA 2022), this question is an urgent one.  Bike share programs have been found to reduce car use in some cities, but not all—and the effectiveness of bike share programs in protecting the environment is “dependent on whether [these programs replace] car use” (Fishman et al. 2014).  With that said, bike share programs are most effective at curbing GHGs when they catalyze other changes, like increases in private bike use, improvements to bicycle infrastructure, and support of other policies that facilitate cycling (Schmidt 2018).
 
 5.3 Limitations
 
-The data we used is from the 5-year estimate from 2016-2020; therefore, this estimate primarily includes data from before the COVID-19 pandemic struck.  Usage patterns have certainly changed since the pandemic—in some temporary, and some likely permanent, ways—and in fact there have been analyses performed on these changes.  Because our analysis sought to investigate the baseline structure of the system, we worked with data from before the pandemic, but COVID-19 has transformed our society forever, so those changes are important to consider in future planning efforts.
+The data we used is from the 5-year estimate from 2016-2019; therefore, this estimate primarily includes data from before the COVID-19 pandemic struck.  Usage patterns have certainly changed since the pandemic—in some temporary, and some likely permanent, ways—and in fact there have been analyses performed on these changes.  Because our analysis sought to investigate the baseline structure of the system, we worked with data from before the pandemic, but COVID-19 has transformed our society forever, so those changes are important to consider in future planning efforts.
 
 Over the course our project, we encountered two primary analytical difficulties.  The first was comparing results across regressions.  A given independent variable might be significant in one regression and not significant in the other, even though the dependent variable of bike station locations was the same between both models.  We could understand how the coefficient and significance might vary based on the other variables in the model, but it did not make sense to us that a variable that was statistically significant in one analysis could wholly drop from the statistically significant view in another model with the same outcome variable.  The other analytical issue we faced was the types of variables available to us.  The tidycensus package allows users to access and analyze the Census data quickly and easily, but it doesn’t, of course, change what kinds of variables the Census includes.  Even with our fairly wide distribution of variables, we still only explained about 10% of the variation in bike station locations in Boston.  With more kinds of variables—say about land use types, business openings and closures, or consumer expenditures—we might capture more of the dynamics that help determine where these bike share stations get built.
 
