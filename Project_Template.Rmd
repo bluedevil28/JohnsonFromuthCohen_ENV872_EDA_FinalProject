@@ -54,7 +54,7 @@ In the era of the climate crisis, the race is on to find ways to reduce the gree
 As with any other new amenity, it is worth scrutinizing how and where a given municipality with bike sharing chooses to make that amenity available.  For our study, we chose to investigate the siting of bike-sharing stations in Boston.  The Census data offered thousands of variables, of which we selected several: demographic, including family size and race; financial, including homeownership status and income; and professional, including employment status and mode of commute to work.  For this analysis, we sought to determine whether the locations of bike-sharing stations in the city were related to the categories of people found across census tracts.  We chose Boston because its data availability was robust and all the members of our group have lived in or near Boston, and we focused on bike sharing programs because several group members are specifically interested in questions of equity and access in the world of transportation.  Public officials in Boston have also publicly expressed a desire to make bike sharing available to all, so our team wondered whether that sentiment was evident in the real locations of bike stations in the city.
 
 We chose the following question to anchor our inquiry:\
-Do the locations of bike sharing stations in Boston serve the needs of diverse user groups?
+Are bike sharing stations in Boston equally available across population groups?
 
 \newpage
 
@@ -214,7 +214,7 @@ plot5
 
 # Analysis
 
-## Question 1: Are bike sharing stations in Boston widely available across population categories?
+## Question: Are bike sharing stations in Boston equally available across population groups?
 
 After mapping the most salient equity-related variables against the locations of bike stations in Boston, we parsed and prepared the other variables we had selected to be included in a General Linear Model (GLM).  We put all the variables in one dataset and used an Akaike Information Criterion (AIC) call in R to isolate the variables that would best contribute to a robust combined regression.  Then, we ran a regression and built a GLM with the strongest variables from the batch we had chosen.  The variables with significance in our final regression were the percentages of people who use public transit to commute to work, and who commute to work by driving alone in a personal vehicle.  It is worth noting, though, that the R-Squared values of our regression were low—0.1293 for the Multiple R-Squared and 0.1055 for the Adjusted R-Squared—so the proportion of the variation in the locations of bike stations around Boston that is explained with our selected variables is low.
 
@@ -222,13 +222,13 @@ After mapping the most salient equity-related variables against the locations of
 
 # Summary and Conclusions
 
-5.1 Expected distribution inequity absent
+## 5.1 Expected distribution inequity absent
 
 In a typical example of a statistic representing whether bike sharing programs have been successful in reaching across user groups, one study found that in New York City, only 16.5% of people of color have access to Citi Bike, the city’s bike sharing program (Pitt 2019).  The literature also finds that the people who are likeliest to bike to work are young urban dwellers (US Census Bureau 2019), and “super-users” are more likely to be young, have household incomes below $75,000, and live and work near bike share stations (Winters et al. 2019).  Our team expected to find similar results in Boston, another city that has experienced gentrification and the stratification of available amenities by socio-economic class and race.  We did not find such results: both from the visual and the statistical perspective, demographic variables like income, race, and age do not have much to do with where bike share stations are in Boston.  These findings could be because the barriers to participation that we imagined are not the ones that apply.  A different obstacle could be perceptions of cycling safety, although riding a bike from a bike sharing program can be even safer than riding a personal bike (Walker 2019).  For another idea, one author posits that lack of information, not access, is what makes bike share programs skew white and wealthy in many places (Schneider 2017)—in other words, many people just don’t know enough about bike sharing programs to be comfortable taking advantage of them, despite their ready availability near where people live.
 
-5.2 Alternate commute modes correlate with Boston bike station locations
+## 5.2 Alternate commute modes correlate with Boston bike station locations
 
-The variables that were significant in our regression of where Boston bike stations are were those who commute to work via public transit, and those who drive to work alone in a private vehicle.  For both variables, the coefficient in the regression was negative: -2.3843 at p = 0.000332 for public transit commuters, and -2.1573 at p = 0.027758 for those who drive to work in cars by themselves.  Our regression tells us that those living nearer to bike stations are less likely to commute to work by public transit or alone in personal vehicles, 
+The variables that were significant in our regression of Boston bike stations locations were those who commute to work via public transit, and those who drive to work alone in a private car.  For both variables, the coefficient in the regression was negative: -2.3843 at p = 0.000332 for public transit commuters, and -2.1573 at p = 0.027758 for those who drive to work in cars by themselves.  Our model shows that those living nearer to bike stations are less likely to commute to work either alone in personal vehicles or by public transit.  This finding is the opposite of what we expected: 
 
 -which is the opposite of what we expected (bundling of pro-environment behaviors)
 -maybe the location of bike stations is irrespective of population characteristics altogether and instead tracks e.g. tourist traps
@@ -236,13 +236,13 @@ The variables that were significant in our regression of where Boston bike stati
 
 .  The larger environmental context around bike sharing programs asks whether these programs reduce the number of miles that urban residents drive, as people switch between driving and other modes of transport for their daily activities.  Considering transportation is responsible for 27% of 2020 GHG emissions in US (EPA 2022), this question is an urgent one.  Bike share programs have been found to reduce car use in some cities, but not all—and the effectiveness of bike share programs in protecting the environment is “dependent on whether [these programs replace] car use” (Fishman et al. 2014).  With that said, bike share programs are most effective at curbing GHGs when they catalyze other changes, like increases in private bike use, improvements to bicycle infrastructure, and support of other policies that facilitate cycling (Schmidt 2018).
 
-5.3 Limitations
+## 5.3 Limitations
 
 The data we used is from the 5-year estimate from 2016-2019; therefore, this estimate primarily includes data from before the COVID-19 pandemic struck.  Usage patterns have certainly changed since the pandemic—in some temporary, and some likely permanent, ways—and in fact there have been analyses performed on these changes.  Because our analysis sought to investigate the baseline structure of the system, we worked with data from before the pandemic, but COVID-19 has transformed our society forever, so those changes are important to consider in future planning efforts.
 
 Over the course our project, we encountered two primary analytical difficulties.  The first was comparing results across regressions.  A given independent variable might be significant in one regression and not significant in the other, even though the dependent variable of bike station locations was the same between both models.  We could understand how the coefficient and significance might vary based on the other variables in the model, but it did not make sense to us that a variable that was statistically significant in one analysis could wholly drop from the statistically significant view in another model with the same outcome variable.  The other analytical issue we faced was the types of variables available to us.  The tidycensus package allows users to access and analyze the Census data quickly and easily, but it doesn’t, of course, change what kinds of variables the Census includes.  Even with our fairly wide distribution of variables, we still only explained about 10% of the variation in bike station locations in Boston.  With more kinds of variables—say about land use types, business openings and closures, or consumer expenditures—we might capture more of the dynamics that help determine where these bike share stations get built.
 
-5.4 Future Recommendations
+## 5.4 Future Recommendations
 
 As alluded to above, the first area we recommend future research target is incorporating other Census datasets and variables into this same type of analysis.  Surveys of capital expenditures, retail trade, business formation and closures, and consumer expenditures could help illuminate the value flows in Boston that shape policymakers and developers perceptions and plans.
 
@@ -254,18 +254,18 @@ Third and finally, the impact of bike share programs on overall city congestion 
 
 # References
 
-Bureau, U. C. (2019, May 14). *May 17 is National Bike to Work Day*. Census.Gov. https://www.census.gov/library/stories/2019/05/younger-workers-in-cities-more-likely-to-bike-to-work.html
-Bureau, U. C. (2022, January 6). *About the American Community Survey*. Census.Gov. https://www.census.gov/programs-surveys/acs/about.html
-Clockston, R. L. M., & Rojas-Rueda, D. (2021). Health impacts of bike-sharing systems in the U.S. *Environmental Research, 202*, 111709. https://doi.org/10.1016/j.envres.2021.111709
-Fishman, E., Washington, S., & Narelle, H. (2014). Bike share’s impact on car use: Evidence from the United States, Great Britain, and Australia. *Transportation Research Part D: Transport and Environment, 31*, 13–20. https://doi.org/10.1016/j.trd.2014.05.013
-Moraga, P. (2022). *Chapter 2 Spatial data and R packages for mapping | Geospatial Health Data: Modeling and Visualization with R-INLA and Shiny*. Retrieved April 17, 2022, from https://www.paulamoraga.com/book-geospatial/sec-spatialdataandCRS.html
-Motivate International Inc. (2022). *Bluebikes System Data*. Blue Bikes Boston. Retrieved April 17, 2022, from http://www.bluebikes.com/system-data
-Plitt, A. (2019, July 10). Citi Bike fails to serve New Yorkers in poverty and communities of color: Report. Curbed NY. https://ny.curbed.com/2019/7/10/20689177/citi-bike-equity-expansion-report
-Schmidt, C. (2018). Active Travel for All? The Surge in Public Bike-Sharing Programs. *Environmental Health Perspectives, 126*(8), 082001. https://doi.org/10.1289/EHP3754
-Schneider, B. (2017, July 14). Bike Sharing Still Has a Stubborn Diversity Gap. *Bloomberg.Com*. https://www.bloomberg.com/news/articles/2017-07-14/explaining-the-diversity-and-equity-gap-in-bike-sharing
-US EPA, O. (2015, December 29). *Sources of Greenhouse Gas Emissions* [Overviews and Factsheets]. https://www.epa.gov/ghgemissions/sources-greenhouse-gas-emissions
-Walker, A. (2019, December 16). *How bike share became the decade’s biggest transit success story*. Curbed. https://archive.curbed.com/2019/12/16/20864145/bike-share-citi-bike-jump-uber
-Walker, K. E. (2022). *Chapter 6 Mapping Census data with R | Analyzing US Census Data*. Retrieved April 17, 2022, from https://walker-data.com/census-r/mapping-census-data-with-r.html
-Walker, K., & Herman, M. (2022). *Basic usage of tidycensus*. Retrieved April 17, 2022, from https://walker-data.com/tidycensus/articles/basic-usage.html
-Wang, M., & Zhou, X. (2017). Bike-sharing systems and congestion: Evidence from US cities. *Journal of Transport Geography, 65*, 147–154. https://doi.org/10.1016/j.jtrangeo.2017.10.022
+Bureau, U. C. (2019, May 14). *May 17 is National Bike to Work Day*. Census.Gov. https://www.census.gov/library/stories/2019/05/younger-workers-in-cities-more-likely-to-bike-to-work.html \
+Bureau, U. C. (2022, January 6). *About the American Community Survey*. Census.Gov. https://www.census.gov/programs-surveys/acs/about.html \
+Clockston, R. L. M., & Rojas-Rueda, D. (2021). Health impacts of bike-sharing systems in the U.S. *Environmental Research, 202*, 111709. https://doi.org/10.1016/j.envres.2021.111709 \
+Fishman, E., Washington, S., & Narelle, H. (2014). Bike share’s impact on car use: Evidence from the United States, Great Britain, and Australia. *Transportation Research Part D: Transport and Environment, 31*, 13–20. https://doi.org/10.1016/j.trd.2014.05.013 \
+Moraga, P. (2022). *Chapter 2 Spatial data and R packages for mapping | Geospatial Health Data: Modeling and Visualization with R-INLA and Shiny*. Retrieved April 17, 2022, from https://www.paulamoraga.com/book-geospatial/sec-spatialdataandCRS.html \
+Motivate International Inc. (2022). *Bluebikes System Data*. Blue Bikes Boston. Retrieved April 17, 2022, from http://www.bluebikes.com/system-data \
+Plitt, A. (2019, July 10). Citi Bike fails to serve New Yorkers in poverty and communities of color: Report. Curbed NY. https://ny.curbed.com/2019/7/10/20689177/citi-bike-equity-expansion-report \
+Schmidt, C. (2018). Active Travel for All? The Surge in Public Bike-Sharing Programs. *Environmental Health Perspectives, 126*(8), 082001. https://doi.org/10.1289/EHP3754 \
+Schneider, B. (2017, July 14). Bike Sharing Still Has a Stubborn Diversity Gap. *Bloomberg.Com*. https://www.bloomberg.com/news/articles/2017-07-14/explaining-the-diversity-and-equity-gap-in-bike-sharing \
+US EPA, O. (2015, December 29). *Sources of Greenhouse Gas Emissions [Overviews and Factsheets]*. https://www.epa.gov/ghgemissions/sources-greenhouse-gas-emissions \
+Walker, A. (2019, December 16). *How bike share became the decade’s biggest transit success story*. Curbed. https://archive.curbed.com/2019/12/16/20864145/bike-share-citi-bike-jump-uber \
+Walker, K. E. (2022). *Chapter 6 Mapping Census data with R | Analyzing US Census Data*. Retrieved April 17, 2022, from https://walker-data.com/census-r/mapping-census-data-with-r.html \
+Walker, K., & Herman, M. (2022). *Basic usage of tidycensus*. Retrieved April 17, 2022, from https://walker-data.com/tidycensus/articles/basic-usage.html \
+Wang, M., & Zhou, X. (2017). Bike-sharing systems and congestion: Evidence from US cities. *Journal of Transport Geography, 65*, 147–154. https://doi.org/10.1016/j.jtrangeo.2017.10.022 \
 Winters, M., Hosford, K., & Javaheri, S. (2019). Who are the ‘super-users’ of public bike share? An analysis of public bike share members in Vancouver, BC. *Preventive Medicine Reports, 15*, 100946. https://doi.org/10.1016/j.pmedr.2019.100946
