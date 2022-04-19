@@ -38,6 +38,7 @@ library(mapview)
 mapviewOptions(fgb = FALSE)
 library(ggplot2)
 library(tidyr)
+install.packages("writeOGR")
 
 # Set your ggplot theme
 mytheme <- theme_classic(base_size = 14) +
@@ -96,6 +97,174 @@ We began our analysis by importing data from both of our sources.   For the Cens
 # Exploratory Analysis 
 
 Following initial wrangling, we produced maps combining the locations of bike sharing stations and the depictions of certain key variables that relate to transit equity: income and race.  The results of this mapping—which informed our selection of additional variables that represent parts of the lives of urban families—can be found in the series of images below.
+
+```{r bike stations and census data loading, echo= FALSE, message=FALSE, warning=FALSE}
+
+Bikes.2021 <- read.csv("../JohnsonFromuthCohen_ENV872_EDA_FinalProject/Data_Raw/Blue_Bike_Stations_2021.csv", stringsAsFactors = TRUE)
+
+Bikes.2021 <- Bikes.2021 %>%
+      filter(District=="Boston")
+
+Bikes.2021.sf <- Bikes.2021 %>% 
+  st_as_sf(coords = c('Longitude', 'Latitude'), crs=4269)
+
+#Get key
+census_api_key('111339232f4137ed330544649d9c1c65d82c047c', `install=TRUE`)
+
+#census tract data for income
+ma.suffolk.income <- get_acs(
+  geography = "tract", 
+  variables = c(medIncome= "B19013_001" 
+                ),  
+  state = "MA", 
+  geometry = TRUE,
+  year = 2020,
+  county = "Suffolk"
+)
+
+ma.suffolk.race <- get_acs(
+  geography = "tract", 
+  variables = c(white= "B03002_003" , totpop = "B03002_001"
+                ),  
+  state = "MA", 
+  geometry = TRUE,
+  year = 2020,
+  county = "Suffolk"
+)
+
+census_tracts <- st_read(
+    "../JohnsonFromuthCohen_ENV872_EDA_FinalProject/Census2020_Tracts/Census2020_Tracts.shp")
+
+ma.boston.income <- ma.suffolk.income %>% 
+      filter(GEOID %in% census_tracts$GEOID20) %>%
+      filter(GEOID != "25025981202", GEOID != "25025981800", GEOID != "25025981300",
+         GEOID != "25025990101", GEOID != "25025080801", 
+         GEOID != "25025981100")
+
+ma.boston.race <- ma.suffolk.race %>% 
+      filter(GEOID %in% census_tracts$GEOID20) %>%
+      filter(GEOID != "25025981202", GEOID != "25025981800", GEOID != "25025981300",
+         GEOID != "25025990101", GEOID != "25025080801", 
+         GEOID != "25025981100")
+
+ma.boston.race <-select(ma.boston.race, -moe)
+
+ma.boston.race.1<-spread(ma.boston.race, key=variable, value=estimate)
+ma.boston.race.1
+
+ma.boston.race.1 <- mutate(ma.boston.race.1, perwhite = white/totpop, pernonwhite = 1-perwhite)
+
+boston.income.sf <- ma.boston.income %>% 
+  st_as_sf(coords = c('geometry'),
+           crs=4269)
+
+boston.race.sf <- ma.boston.race.1 %>% 
+  st_as_sf(coords = c('geometry'),
+           crs=4269)
+
+
+```
+
+```{r option two write shapefile}
+
+#boston income shapefile
+#st_write(boston.income.sf, './Data_Processed/boston.income.shp')
+
+getwd()
+#boston race shapefile
+#st_write(boston.race.sf, './Data_Processed/boston.race.shp')
+
+```
+
+
+```{r map bike stations and census, echo= FALSE}
+
+boston.income.sf2 <- st_read(
+    "../JohnsonFromuthCohen_ENV872_EDA_FinalProject/Data_Processed/boston.income.shp")
+
+#map income
+ggplot(boston.income.sf2) + geom_sf(aes(fill=estimate)) + geom_sf(data=Bikes.2021.sf, aes(color="white", alpha = 0.4))
+
+#map race bike stations (white)
+ggplot(boston.race.sf) + geom_sf(aes(fill=perwhite)) + geom_sf(data=Bikes.2021.sf, aes(color="white", alpha = 0.4))
+
+#Race and bike stations  (non white)
+ggplot() + geom_sf(data=boston.race.sf, aes(fill=pernonwhite)) + geom_sf(data=Bikes.2021.sf, aes(color="white", alpha = 0.4))
+```
+
+
+```{r data scatterplots}
+
+census_tracts$NAME20 <- as.numeric(census_tracts$NAME20)
+
+#cannot round tracts
+
+census_tracts$NAME20 <- round(census_tracts$NAME20)
+
+#removed unpopulated tracts to allow bind
+
+census_tracts.1 <- census_tracts %>% 
+      filter(GEOID20 != "25025981202", GEOID20 != "25025981800", GEOID20 != "25025981300",
+         GEOID20 != "25025990101", GEOID20 != "25025080801", 
+         GEOID20 != "25025981100")
+
+census_stations <- cbind(census_tracts.1, bikes.data.join)
+
+
+
+#plot2 <-
+ # ggplot(census_stations, aes(x=NAME20, y=NumStations)) +
+  #geom_point(aes(color=NumStations)) +
+  #ylab("Number Stations") +
+  #xlab("Census Tract Number") +
+  #xlim(0, 1500)
+#use scale y continuous 
+#plot2
+
+#plot2.1 <-
+ # ggplot(census_stations, aes(x=NAME20, y=NumStations)) +
+#  geom_point(aes(color=NumStations)) +
+ # ylab("Number Stations") +
+  #xlab("Census Tract Number") +
+  #xlim(9800, 9820)
+#use scale y continuous 
+#plot2.1
+
+
+plot3 <-
+  ggplot(bikes.data.join, aes(x=pernonwhite, y=NumStations)) +
+  geom_point((aes(color=NumStations)), size = 3) +
+#size = 0.1, alpha = .4), color="blue") +
+  xlab("Percent non white") +
+  ylab("Number of stations") +ylim(0,8) + xlim(0,1)+
+  geom_point(aes(color=NumStations)) 
+plot3
+
+plot3.1 <-
+  ggplot(census.stations, aes(x=NumStations, y=pernonwhite)) +
+  geom_boxplot(aes(size = 0.1, alpha = .4), color="blue") +
+  ylab("Percent non white") +
+  xlab("Number of stations")+
+  xlim(1,6)
+plot3.1
+
+plot3.2 <-
+  ggplot(census.stations) +
+  geom_violin(aes(x = NumStations, y = pernonwhite), 
+              draw_quantiles = c(0.25, 0.5, 0.75))
+
+plot3.2
+
+plot4 <-
+  
+  
+  
++
+  xlim(0, 1500) +
+  ylim(0, 10)
+
+
+```
 
 
 
