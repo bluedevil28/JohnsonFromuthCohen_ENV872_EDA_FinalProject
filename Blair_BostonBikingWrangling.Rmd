@@ -59,7 +59,7 @@ census_api_key('111339232f4137ed330544649d9c1c65d82c047c', `install=TRUE`)
 
 #Get ACS variables 
 v20 <- load_variables(2020, "acs5", cache = TRUE)
-View(v20)
+#View(v20)
 
 ma.suffolk.public.transport <- get_acs(
   geography = "tract", 
@@ -179,7 +179,6 @@ ma.suffolk.totChild6_17 <- get_acs(
 )
 
 #census tract for married couple below poverty line with children ages 6 - 17
-
 ma.suffolk.PovChld6_17 <- get_acs(
   geography = "tract",
   variables = c(PovChld6_17 = "B17006_006"
@@ -232,7 +231,7 @@ ma.suffolk.allChld <- get_acs(
 
 ```{r import shapefile and filter data from Suffolk County to Boston city level}
 census_tracts <- st_read(
-    "../JohnsonFromuthCohen_ENV872_EDA_FinalProject/Census2020_Tracts/Census2020_Tracts.shp")
+    "../JohnsonFromuthCohen_ENV872_EDA_FinalProject/Data_Raw/Census2020_Tracts/Census2020_Tracts.shp")
 
 ma.boston.income <- ma.suffolk.income %>% 
       filter(GEOID %in% census_tracts$GEOID20) %>%
@@ -330,6 +329,8 @@ ma.boston.allChld <- ma.suffolk.allChld %>%
 ```{r}
 
 #Organize data by removing moe and adjusting variables from long to wide 
+
+ma.boston.income <- select(ma.boston.income, -moe)
 
 ma.boston.race <-select(ma.boston.race, -moe)
 
@@ -453,19 +454,20 @@ Chld.join <- st_join(x = boston.allChld.sf, y = Bikes.2021.sf,
                                join = st_intersects)
 
 
-census.data.joined <-cbind(homeowner.join, public.transit.join,race.join, vhc.join, Chld.join)
+census.data.joined <-cbind(homeowner.join, public.transit.join,race.join, vhc.join,Chld.join)
 ```
 
 
 ```{r race and bikes join and correlation}
 #Calculating number of stations in tract, for some reason there are duplicates of a census tract 
 
-census.data.joined <- select(census.data.joined, -NAME.1, -NAME.2, -NAME.3, -NAME.4)
-
+census.data.joined <- select(census.data.joined, -NAME.1 , -NAME.2, -NAME.3, -NAME.4, -Name.1, -Name.2, -Name.3, -Name.4, -GEOID.1, -GEOID.2, -GEOID.3, -GEOID.4)
+census.data.joined <- select(census.data.joined, -geometry)
 
 bikes.data.join <- census.data.joined %>%
   select(NAME, Name, perwhite, pernonwhite, per.homeowner, per.public, drive_alone, carpool, onePrnt6to17, PovChld6_17) %>%
   group_by(NAME, perwhite, pernonwhite, per.homeowner, per.public, drive_alone, carpool, onePrnt6to17, PovChld6_17) %>%
+<<<<<<< HEAD
    #filter(!is.na(estimate)) %>%
   summarise(NumStations = length(unique(Name)))
 
@@ -473,40 +475,28 @@ st_write(bikes.data.join, './Data_Processed/bikes.data.join.shp')
 
 ```
 
+=======
+>>>>>>> 88fe3bcf0f873d1880d8521b7fc9ec4edccd9ee9
 
-```{r race and bikes join and correlation}
-#WRITE CSV 
+  bikes.data.join <- select (bikes.data.join, -geometry) 
 
-bikes.data.join.df <- as.data.frame(bikes.data.join)
+  
+bikes.data.join.2 <- bikes.data.join %>%
+    select(NAME, Name, perwhite, pernonwhite, per.homeowner, per.public, drive_alone, carpool, onePrnt6to17, PovChld6_17) %>%
+   group_by(NAME, perwhite, pernonwhite, per.homeowner, per.public, drive_alone, carpool, onePrnt6to17, PovChld6_17) %>%
+    summarise(NumStations = sum(length(unique(Name, na.rm = TRUE))))
 
-write.csv(bikes.data.join.df,  file="../JohnsonFromuthCohen_ENV872_EDA_FinalProject/Data_Processed/Bikes.Census.Data.csv")
+write.csv(bikes.data.join.2, file ="../JohnsonFromuthCohen_ENV872_EDA_FinalProject/Data_Processed/Bikes.Census.Stations.csv")
+#Check bikes.data.join to update the census tracts with zero bike stations. 
 
+#upload new csv / processed dataset 
+bikes.data.clean <- read.csv("../JohnsonFromuthCohen_ENV872_EDA_FinalProject/Data_Processed/Bikes.Census.Stations_updated.csv")
 
-#RUN TO SEE AICS
 ```
 
 
-```{r race and bikes join and correlation}
-bike.variables.model <- lm(data=bikes.data.join, NumStations ~ perwhite + per.homeowner + per.public +carpool +drive_alone)
-summary(bike.variables.model)
-#R-squared 0.13 with per white, per homeowner, per.public, carpool, drive alone
-#R-square was lower when added onePrnt6to17(children6-17 with one parent) and PovChld6_17 (children 6-17 in poverty)
 
-Bikes.AIC.1 <- lm (data=bikes.data.join, NumStations ~ perwhite + per.homeowner + per.public + carpool + drive_alone) 
-step(Bikes.AIC.1)
 
-Bikes.AIC.2 <- lm (data=bikes.data.join, NumStations ~ perwhite + per.homeowner + per.public + carpool ) 
-step(Bikes.AIC.2)
-#<none> is first here 
-
-Bikes.AIC.3 <-  lm (data=bikes.data.join, NumStations ~ pernonwhite + per.homeowner + per.public + PovChld6_17) 
-step(Bikes.AIC.3)
-
-Bikes.AIC.4 <- lm (data=bikes.data.join, NumStations ~  per.homeowner + per.public ) 
-step(Bikes.AIC.4)
-
-Bikes.AIC.5 <- lm (data=bikes.data.join, NumStations ~ perwhite + per.homeowner + per.public + carpool + PovChld6_17)
-step(Bikes.AIC.5)
 
 ```
 
