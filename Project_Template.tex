@@ -92,7 +92,7 @@
 Questions}\label{rationale-and-research-questions}}
 
 In the era of the climate crisis, the race is on to find ways to reduce
-the greenhouse gas (GHG) emissions associated with every possible modern
+the greenhouse gas (GHG) emissions connected with every possible modern
 activity and sector of the economy. Cities face unique challenges and
 opportunities in the realm of sustainability. On a basic level, the
 major environmental advantage of a city is in population density: urban
@@ -259,10 +259,11 @@ urban families---can be found in the series of images below.
 
 \includegraphics{Project_Template_files/figure-latex/data scatterplots pr_pblc-1.pdf}
 
-\newpage
+\hypertarget{figure-8}{%
+\subsection{\texorpdfstring{\emph{Figure 8}}{Figure 8}}\label{figure-8}}
 
-\hypertarget{analysis}{%
-\section{Analysis}\label{analysis}}
+\includegraphics{Project_Template_files/figure-latex/data scatterplots income-1.pdf}
+\newpage \# Analysis
 
 \hypertarget{question-are-bike-sharing-stations-in-boston-equally-available-across-population-groups}{%
 \subsection{Question: Are bike sharing stations in Boston equally
@@ -318,28 +319,37 @@ people just don't know enough about bike sharing programs to be
 comfortable taking advantage of them, despite their ready availability
 near where people live.
 
-\hypertarget{alternate-commute-modes-correlate-with-boston-bike-station-locations}{%
-\subsection{5.2 Alternate commute modes correlate with Boston bike
-station
-locations}\label{alternate-commute-modes-correlate-with-boston-bike-station-locations}}
+\hypertarget{alternate-commute-modes-negatively-correlate-with-boston-bike-station-locations}{%
+\subsection{5.2 Alternate commute modes negatively correlate with Boston
+bike station
+locations}\label{alternate-commute-modes-negatively-correlate-with-boston-bike-station-locations}}
 
 The variables that were significant in our regression of Boston bike
-stations locations were those who commute to work via public transit,
-and those who drive to work alone in a private car. For both variables,
-the coefficient in the regression was negative: -2.3843 at p = 0.000332
-for public transit commuters, and -2.1573 at p = 0.027758 for those who
-drive to work in cars by themselves. Our model shows that those living
-nearer to bike stations are less likely to commute to work either alone
-in personal vehicles or by public transit. This finding is the opposite
-of what we expected:
+station locations were the proportion of people who commute to work via
+public transit, and the portion who drive to work alone in a private
+car. For both variables, the coefficient in the regression was negative:
+-2.3843 at p = 0.000332 for public transit commuters, and -2.1573 at p =
+0.027758 for those who drive to work in cars by themselves. Our model
+shows that the more people there are in a given census tract who commute
+to work either alone in personal vehicles or by public transit, the
+lower number of bike stations found in that census tract. This finding
+is not what we anticipated: we posited that there would be a bundling of
+pro-environment indicators--more people using environmentally friendly
+commuting methods like public transit correlating with more bike
+stations available for people to use for errands, recreation, or
+commuting. Instead, the two significant variables in the regression
+point in opposite directions: fewer bike stations as more people commute
+to work alone in private cars (the bundling we expected), but also fewer
+bike stations as more people commute to work using public transit (not
+the bundling we expected). Perhaps the locations of Boston bike stations
+are irrespective of population characteristics altogether, and instead
+track other elements of the city, such as areas that are most popular
+with tourists. Also, the dataset we used for carpooling behavior was
+much smaller than we had hoped, raising the question of whether its
+sample size is sufficiently large to merit statistical confidence in the
+associated findings.
 
--which is the opposite of what we expected (bundling of pro-environment
-behaviors) -maybe the location of bike stations is irrespective of
-population characteristics altogether and instead tracks e.g.~tourist
-traps -dataset for carpooling behavior was too small to merit
-statistical confidence in the sample size
-
-. The larger environmental context around bike sharing programs asks
+The larger environmental context around bike sharing programs asks
 whether these programs reduce the number of miles that urban residents
 drive, as people switch between driving and other modes of transport for
 their daily activities. Considering transportation is responsible for
