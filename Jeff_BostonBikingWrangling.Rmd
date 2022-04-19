@@ -121,6 +121,86 @@ ma.suffolk.race <- get_acs(
 )
 ```
 
+```{r temporary code storage}
+
+Bikes.2021 <- read.csv("../JohnsonFromuthCohen_ENV872_EDA_FinalProject/Data_Raw/Blue_Bike_Stations_2021.csv", stringsAsFactors = TRUE)
+
+Bikes.2021 <- Bikes.2021 %>%
+      filter(District=="Boston")
+
+Bikes.2021.sf <- Bikes.2021 %>% 
+  st_as_sf(coords = c('Longitude', 'Latitude'), crs=4269)
+
+#Get key
+census_api_key('111339232f4137ed330544649d9c1c65d82c047c', `install=TRUE`)
+
+#census tract data for income
+ma.suffolk.income <- get_acs(
+  geography = "tract", 
+  variables = c(medIncome= "B19013_001" 
+                ),  
+  state = "MA", 
+  geometry = TRUE,
+  year = 2020,
+  county = "Suffolk"
+)
+
+ma.suffolk.race <- get_acs(
+  geography = "tract", 
+  variables = c(white= "B03002_003" , totpop = "B03002_001"
+                ),  
+  state = "MA", 
+  geometry = TRUE,
+  year = 2020,
+  county = "Suffolk"
+)
+
+census_tracts <- st_read(
+    "../JohnsonFromuthCohen_ENV872_EDA_FinalProject/Census2020_Tracts/Census2020_Tracts.shp")
+
+ma.boston.income <- ma.suffolk.income %>% 
+      filter(GEOID %in% census_tracts$GEOID20) %>%
+      filter(GEOID != "25025981202", GEOID != "25025981800", GEOID != "25025981300",
+         GEOID != "25025990101", GEOID != "25025080801", 
+         GEOID != "25025981100")
+
+ma.boston.race <- ma.suffolk.race %>% 
+      filter(GEOID %in% census_tracts$GEOID20) %>%
+      filter(GEOID != "25025981202", GEOID != "25025981800", GEOID != "25025981300",
+         GEOID != "25025990101", GEOID != "25025080801", 
+         GEOID != "25025981100")
+
+ma.boston.race <-select(ma.boston.race, -moe)
+
+ma.boston.race.1<-spread(ma.boston.race, key=variable, value=estimate)
+ma.boston.race.1
+
+ma.boston.race.1 <- mutate(ma.boston.race.1, perwhite = white/totpop, pernonwhite = 1-perwhite)
+
+boston.income.sf <- ma.boston.income %>% 
+  st_as_sf(coords = c('geometry'),
+           crs=4269)
+
+boston.race.sf <- ma.boston.race.1 %>% 
+  st_as_sf(coords = c('geometry'),
+           crs=4269)
+
+
+```
+
+```{r option two write shapefile, echo= FALSE, message=FALSE, warning=FALSE}
+
+#boston income shapefile
+#st_write(boston.income.sf, './Data_Processed/boston.income.shp')
+
+getwd()
+#boston race shapefile
+st_write(boston.race.sf, './Data_Processed/boston.race.shp')
+
+
+st_write(Bikes.2021.sf, './Data_Processed/Bikes.2021.shp')
+
+```
 
 ```{r , census data load echo=FALSE}
 #census tract data for carpool
