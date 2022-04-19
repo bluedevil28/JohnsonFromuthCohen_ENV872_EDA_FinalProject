@@ -468,6 +468,9 @@ bikes.data.join <- census.data.joined %>%
   group_by(NAME, perwhite, pernonwhite, per.homeowner, per.public, drive_alone, carpool, onePrnt6to17, PovChld6_17) %>%
    #filter(!is.na(estimate)) %>%
   summarise(NumStations = length(unique(Name)))
+
+st_write(bikes.data.join, './Data_Processed/bikes.data.join.shp')
+
 ```
 
 
