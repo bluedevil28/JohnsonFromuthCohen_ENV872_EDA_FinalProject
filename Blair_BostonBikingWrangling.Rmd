@@ -467,9 +467,14 @@ census.data.joined <- select(census.data.joined, -geometry)
 bikes.data.join <- census.data.joined %>%
   select(NAME, Name, perwhite, pernonwhite, per.homeowner, per.public, drive_alone, carpool, onePrnt6to17, PovChld6_17) %>%
   group_by(NAME, perwhite, pernonwhite, per.homeowner, per.public, drive_alone, carpool, onePrnt6to17, PovChld6_17) %>%
+  #filter(!is.na(estimate)) %>%
+  summarise(NumStations = length(unique(Name)))
 
-  bikes.data.join <- select (bikes.data.join, -geometry) 
+st_write(bikes.data.join, './Data_Processed/bikes.data.join.shp')
 
+```
+
+```{r}
   
 bikes.data.join.2 <- bikes.data.join %>%
     select(NAME, Name, perwhite, pernonwhite, per.homeowner, per.public, drive_alone, carpool, onePrnt6to17, PovChld6_17) %>%
@@ -481,6 +486,9 @@ write.csv(bikes.data.join.2, file ="../JohnsonFromuthCohen_ENV872_EDA_FinalProje
 
 #upload new csv / processed dataset 
 bikes.data.clean <- read.csv("../JohnsonFromuthCohen_ENV872_EDA_FinalProject/Data_Processed/Bikes.Census.Stations_updated.csv")
+```
+
+
 
 ```
 
