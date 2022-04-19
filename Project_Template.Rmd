@@ -51,6 +51,7 @@ theme_set(mytheme)
 
 # Load your datasets
 
+Bikes.Data.Joined <- read.csv("../JohnsonFromuthCohen_ENV872_EDA_FinalProject/Data_Processed/Bikes.Census.Stations_updated.csv")
 ```
 
 
@@ -76,7 +77,7 @@ For this analysis, we used data from two different sources.  For population data
 data.sources.column.1 <- c("Analyze Boston-City of Boston","American Community Survey-U.S. Census Bureau")
 data.sources.column.1 <-as.data.frame(data.sources.column.1)
 
-variables.used.column.2 <- c("Blue Bike Station Locations", "Percent of homeowners, Percent of residents carpooling, Percent of residents driving alone, Percent of residents using public transporation, Percent White, Percent Non-White, ")
+variables.used.column.2 <- c("Blue Bike Station Locations", "Percent of homeowners, Percent of residents carpooling, Percent of residents driving alone, Percent of residents using public transporation, Percent White, Percent Non-White")
 variables.used.column.2 <- as.data.frame(variables.used.column.2)
 
 data.time.period.column.3 <- c("Released in 2021", "2016-2020 Census")
@@ -87,7 +88,7 @@ names(Data.table) <- c("Data Sources", "Variables Used", "Time Period")
 
 
 knitr::kable(Data.table, 
-             caption = "Dataset Information", table.attri ="style='width:30%;")
+             caption = "Dataset Information")
 ```
 
 
@@ -112,7 +113,7 @@ boston.race.sf2 <- st_read(
 Bikes.2021.sf2 <- st_read(
     "../JohnsonFromuthCohen_ENV872_EDA_FinalProject/Data_Processed/Bikes.2021.shp")
 
-bikes.data.join <- st_read(
+bikes.data.join.sf <- st_read(
  "../JohnsonFromuthCohen_ENV872_EDA_FinalProject/Data_Processed/bikes.data.join.shp") 
 
 
@@ -138,7 +139,7 @@ Racenw.bikeplot
 ## *Figure 2* 
 ```{r develop plots race white, fig.align= 'left', echo= FALSE}
 #map race bike stations (white)
-Racew.bikeplot <-
+Race.bikeplot <-
   ggplot(boston.race.sf2) + geom_sf(aes(fill=perwhit)) +  
   scale_fill_viridis(option = "B", direction = 1, label = scales::percent) + 
   geom_sf(data=Bikes.2021.sf2, alpha = 0.6, color="royal blue") + labs(fill= "Race density") +
@@ -146,7 +147,7 @@ Racew.bikeplot <-
   labs(title = "Bike Stations and Race by Census Tract: Non-White",
        subtitle = "Distribution of Bike Stations (in blue) and Race", 
        caption = "Data Source: Census.gov - American Community Survey ; 2020")
-Racew.bikeplot
+Race.bikeplot
 ```
 
 
@@ -162,7 +163,7 @@ plot_grid(Bike_plots,Race.legend,nrow=2,rel_heights=c(2,0.5))
 ## *Figures 3 and 4* 
 ```{r data scatterplots prnnwht, echo=FALSE, warning=FALSE}
 plot1 <-
-  ggplot(bikes.data.join, aes(x=prnnwht, y=NmSttns, color = NmSttns)) +
+  ggplot(Bikes.Data.Joined, aes(x=pernonwhite, y=NumStations, color = NumStations)) +
   geom_point(alpha = 0.9, size = 3) +
   labs(color="Number of Stations")+
   scale_color_viridis(option = "virids", direction = -1) +
@@ -174,7 +175,7 @@ plot1 <-
 plot1
 
 plot2 <-
-ggplot(bikes.data.join, aes(x=perwhit, y=NmSttns, color = NmSttns)) +
+ggplot(Bikes.Data.Joined, aes(x=perwhite, y=NumStations, color = NumStations)) +
   geom_point(alpha = 0.9, size = 3) +
   labs(color="Number of Stations")+
   scale_color_viridis(option = "virids", direction = -1) +
@@ -189,7 +190,7 @@ plot2
 ## *Figures 5 and 6*
 ```{r data scatterplots driv_ln, echo=FALSE, warning=FALSE}
 plot3 <-
-ggplot(bikes.data.join, aes(x=driv_ln, y=NmSttns, color = NmSttns)) +
+ggplot(Bikes.Data.Joined, aes(x=drive_alone, y=NumStations, color = NumStations)) +
   geom_point(alpha = 0.9, size = 3) +
   labs(color="Number of Stations")+
   scale_color_viridis(option = "cividis", direction = -1) +
@@ -201,7 +202,7 @@ ggplot(bikes.data.join, aes(x=driv_ln, y=NmSttns, color = NmSttns)) +
 plot3
 
 plot4 <-
-ggplot(bikes.data.join, aes(x=carpool, y=NmSttns, color = NmSttns)) +
+ggplot(Bikes.Data.Joined, aes(x=carpool, y=NumStations, color = NumStations)) +
   geom_point(alpha = 0.9, size = 3) +
   labs(color="Number of Stations")+
   scale_color_viridis(option = "plasma", direction = -1) +
@@ -216,7 +217,7 @@ plot4
 ## *Figure 7*
 ```{r data scatterplots pr_pblc, echo=FALSE, warning=FALSE}
 plot5 <-
-ggplot(bikes.data.join, aes(x=pr_pblc, y=NmSttns, color = NmSttns)) +
+ggplot(Bikes.Data.Joined, aes(x=per.public, y=NumStations, color = NumStations)) +
   geom_point(alpha = 0.9, size = 3) +
   labs(color="Number of Stations")+
   scale_color_viridis(option = "rocket", direction = -1) +
@@ -245,7 +246,11 @@ plot5
 
 After mapping the most salient equity-related variables against the locations of bike stations in Boston, we parsed and prepared the other variables we had selected to be included in a General Linear Model (GLM).  We put all the variables in one dataset and used an Akaike Information Criterion (AIC) call in R to isolate the variables that would best contribute to a robust combined regression.  Then, we ran a regression and built a GLM with the strongest variables from the batch we had chosen.  The variables with significance in our final regression were the percentages of people who use public transit to commute to work, and who commute to work by driving alone in a personal vehicle.  It is worth noting, though, that the R-Squared values of our regression were low—0.1293 for the Multiple R-Squared and 0.1055 for the Adjusted R-Squared—so the proportion of the variation in the locations of bike stations around Boston that is explained with our selected variables is low.
 
-## Question 2: 
+
+```{r}
+results.column.1 <-c("")
+```
+
 
 
 
