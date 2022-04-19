@@ -5,9 +5,9 @@ output:
     fig_caption: yes
     number_sections: yes
 geometry: margin=2.54cm
-title: "Insert title of project here"
-subtitle: "Web address for GitHub repository"
-author: "Name"
+title: "Bike Stations in Boston"
+subtitle: "https://github.com/bluedevil28/JohnsonFromuthCohen_ENV872_EDA_FinalProject"
+author: "Laurel Cohen, Jeff Fromuth, Blair Johnson"
 fontsize: 12pt
 mainfont: Times New Roman
 
@@ -26,7 +26,25 @@ mainfont: Times New Roman
 
 # Load your packages
 
+library(tidycensus)
+library(rgdal)
+library(uuid)
+library(dplyr)
+options(tigris_use_cache = TRUE)
+library(sf)
+library(tigris)
+library(leaflet)
+library(mapview)
+mapviewOptions(fgb = FALSE)
+library(ggplot2)
+library(tidyr)
+install.packages("writeOGR")
+
 # Set your ggplot theme
+mytheme <- theme_classic(base_size = 14) +
+  theme(axis.text = element_text(color = "black"), 
+        legend.position = "top")
+theme_set(mytheme)
 
 # Load your datasets
 
@@ -46,26 +64,207 @@ We chose the following question to anchor our inquiry:
 
 # Dataset Information
 
-<<<<<<< HEAD
-```{r}
-dataset.column.1 <- c("City of Boston")
-```
 =======
 2.1 Data Retrieval
 
-For this analysis, we used data from two different sources.  For population data in Boston, we accessed CSVs from the website of the United States Census, using the data from the 2015-2019 American Community Survey (ACS).  The ACS is conducted every year and is used to determine how hundreds of millions of state and federal funds are distributed annually (Census Bureau 2022).  For data on the locations of bike sharing stations in Boston, we downloaded shape files from the Blue Bikes Boston website.  To pull the Census data into R, we used a package called tidycensus (Walker 2019, Walker and Herman 2022, Moraga 2022) that allows for easy manipulation and quick visualizations.  The tidycensus package also allows the user to browse through the tens of thousands of variables encompassed by the ACS.  We added all of the data files to our project repository.  All data and code for this project can be retrieved from the GitHub repository.
+For this analysis, we used data from two different sources.  For population data in Boston, we accessed CSVs from the website of the United States Census, using the data from the 2016-2020 American Community Survey (ACS).  The ACS is conducted every year and is used to determine how hundreds of millions of state and federal funds are distributed annually (Census Bureau 2022).  For data on the locations of bike sharing stations in Boston, we downloaded shape files from the Blue Bikes Boston website.  To pull the Census data into R, we used a package called tidycensus (Walker 2019, Walker and Herman 2022, Moraga 2022) that allows for easy manipulation and quick visualizations.  The tidycensus package also allows the user to browse through the tens of thousands of variables encompassed by the ACS.  We added all of the data files to our project repository.  All data and code for this project can be retrieved from the GitHub repository.
+
+```{r}
+data.sources.column.1 <- c("Analyze Boston-City of Boston","American Community Survey-U.S. Census Bureau")
+data.sources.column.1 <-as.data.frame(data.sources.column.1)
+
+variables.used.column.2 <- c("Blue Bike Station Locations", "Percent of homeowners, Percent of residents carpooling, Percent of residents driving alone, Percent of residents using public transporation, Percent White, Percent Non-White, ")
+variables.used.column.2 <- as.data.frame(variables.used.column.2)
+
+data.time.period.column.3 <- c("Released in 2021", "2016-2020 Census")
+data.time.period.column.3 <- as.data.frame(data.time.period.column.3)
+
+Data.table <- cbind(data.sources.column.1, variables.used.column.2, data.time.period.column.3)
+names(Data.table) <- c("Data Sources", "Variables Used", "Time Period")
+
+
+knitr::kable(Data.table, 
+             caption = "Dataset Information", table.attri ="style='width:30%;")
+```
 
 
 2.2 Data Wrangling
 
 We began our analysis by importing data from both of our sources.   For the Census data, we used the tidycensus package to select each of the variables in question individually.  For the bike station data, we imported the shapefiles we had downloaded from the Blue Bikes Boston website.  Next, we filtered all of the data on the county level from Suffolk County to the city of Boston.  For the bike station data, this filtering was possible using the city name of Boston.  For the tract-based Census data, this filtering was accomplished by selecting Boston-specific GEOID numbers.  After importing the relevant ACS variables, we removed the margin of error column from the datasets, spread the data so the format would be conducive to the combining of datasets, and converted the raw numbers for several of the values of interest to percentages.  We then converted the Census data to shapefiles, mapped a few of the Census variables against bike station locations for an initial look at the data, and combined the datasets using the “join” function to allow for combined regression analysis later on.  The opening visualizations can be found in the “exploratory analysis” section below, along with our first impressions of those maps.
->>>>>>> c13c370dfc9b9cb55e5b51892353df51a28cd20e
 
 \newpage
 
 # Exploratory Analysis 
 
 Following initial wrangling, we produced maps combining the locations of bike sharing stations and the depictions of certain key variables that relate to transit equity: income and race.  The results of this mapping—which informed our selection of additional variables that represent parts of the lives of urban families—can be found in the series of images below.
+
+```{r bike stations and census data loading, echo= FALSE, message=FALSE, warning=FALSE}
+
+Bikes.2021 <- read.csv("../JohnsonFromuthCohen_ENV872_EDA_FinalProject/Data_Raw/Blue_Bike_Stations_2021.csv", stringsAsFactors = TRUE)
+
+Bikes.2021 <- Bikes.2021 %>%
+      filter(District=="Boston")
+
+Bikes.2021.sf <- Bikes.2021 %>% 
+  st_as_sf(coords = c('Longitude', 'Latitude'), crs=4269)
+
+#Get key
+census_api_key('111339232f4137ed330544649d9c1c65d82c047c', `install=TRUE`)
+
+#census tract data for income
+ma.suffolk.income <- get_acs(
+  geography = "tract", 
+  variables = c(medIncome= "B19013_001" 
+                ),  
+  state = "MA", 
+  geometry = TRUE,
+  year = 2020,
+  county = "Suffolk"
+)
+
+ma.suffolk.race <- get_acs(
+  geography = "tract", 
+  variables = c(white= "B03002_003" , totpop = "B03002_001"
+                ),  
+  state = "MA", 
+  geometry = TRUE,
+  year = 2020,
+  county = "Suffolk"
+)
+
+census_tracts <- st_read(
+    "../JohnsonFromuthCohen_ENV872_EDA_FinalProject/Census2020_Tracts/Census2020_Tracts.shp")
+
+ma.boston.income <- ma.suffolk.income %>% 
+      filter(GEOID %in% census_tracts$GEOID20) %>%
+      filter(GEOID != "25025981202", GEOID != "25025981800", GEOID != "25025981300",
+         GEOID != "25025990101", GEOID != "25025080801", 
+         GEOID != "25025981100")
+
+ma.boston.race <- ma.suffolk.race %>% 
+      filter(GEOID %in% census_tracts$GEOID20) %>%
+      filter(GEOID != "25025981202", GEOID != "25025981800", GEOID != "25025981300",
+         GEOID != "25025990101", GEOID != "25025080801", 
+         GEOID != "25025981100")
+
+ma.boston.race <-select(ma.boston.race, -moe)
+
+ma.boston.race.1<-spread(ma.boston.race, key=variable, value=estimate)
+ma.boston.race.1
+
+ma.boston.race.1 <- mutate(ma.boston.race.1, perwhite = white/totpop, pernonwhite = 1-perwhite)
+
+boston.income.sf <- ma.boston.income %>% 
+  st_as_sf(coords = c('geometry'),
+           crs=4269)
+
+boston.race.sf <- ma.boston.race.1 %>% 
+  st_as_sf(coords = c('geometry'),
+           crs=4269)
+
+
+```
+
+```{r option two write shapefile}
+
+#boston income shapefile
+#st_write(boston.income.sf, './Data_Processed/boston.income.shp')
+
+getwd()
+#boston race shapefile
+#st_write(boston.race.sf, './Data_Processed/boston.race.shp')
+
+```
+
+
+```{r map bike stations and census, echo= FALSE}
+
+boston.income.sf2 <- st_read(
+    "../JohnsonFromuthCohen_ENV872_EDA_FinalProject/Data_Processed/boston.income.shp")
+
+#map income
+ggplot(boston.income.sf2) + geom_sf(aes(fill=estimate)) + geom_sf(data=Bikes.2021.sf, aes(color="white", alpha = 0.4))
+
+#map race bike stations (white)
+ggplot(boston.race.sf) + geom_sf(aes(fill=perwhite)) + geom_sf(data=Bikes.2021.sf, aes(color="white", alpha = 0.4))
+
+#Race and bike stations  (non white)
+ggplot() + geom_sf(data=boston.race.sf, aes(fill=pernonwhite)) + geom_sf(data=Bikes.2021.sf, aes(color="white", alpha = 0.4))
+```
+
+
+```{r data scatterplots}
+
+census_tracts$NAME20 <- as.numeric(census_tracts$NAME20)
+
+#cannot round tracts
+
+census_tracts$NAME20 <- round(census_tracts$NAME20)
+
+#removed unpopulated tracts to allow bind
+
+census_tracts.1 <- census_tracts %>% 
+      filter(GEOID20 != "25025981202", GEOID20 != "25025981800", GEOID20 != "25025981300",
+         GEOID20 != "25025990101", GEOID20 != "25025080801", 
+         GEOID20 != "25025981100")
+
+census_stations <- cbind(census_tracts.1, bikes.data.join)
+
+
+
+#plot2 <-
+ # ggplot(census_stations, aes(x=NAME20, y=NumStations)) +
+  #geom_point(aes(color=NumStations)) +
+  #ylab("Number Stations") +
+  #xlab("Census Tract Number") +
+  #xlim(0, 1500)
+#use scale y continuous 
+#plot2
+
+#plot2.1 <-
+ # ggplot(census_stations, aes(x=NAME20, y=NumStations)) +
+#  geom_point(aes(color=NumStations)) +
+ # ylab("Number Stations") +
+  #xlab("Census Tract Number") +
+  #xlim(9800, 9820)
+#use scale y continuous 
+#plot2.1
+
+
+plot3 <-
+  ggplot(bikes.data.join, aes(x=pernonwhite, y=NumStations)) +
+  geom_point((aes(color=NumStations)), size = 3) +
+#size = 0.1, alpha = .4), color="blue") +
+  xlab("Percent non white") +
+  ylab("Number of stations") +ylim(0,8) + xlim(0,1)+
+  geom_point(aes(color=NumStations)) 
+plot3
+
+plot3.1 <-
+  ggplot(census.stations, aes(x=NumStations, y=pernonwhite)) +
+  geom_boxplot(aes(size = 0.1, alpha = .4), color="blue") +
+  ylab("Percent non white") +
+  xlab("Number of stations")+
+  xlim(1,6)
+plot3.1
+
+plot3.2 <-
+  ggplot(census.stations) +
+  geom_violin(aes(x = NumStations, y = pernonwhite), 
+              draw_quantiles = c(0.25, 0.5, 0.75))
+
+plot3.2
+
+plot4 <-
+  
+  
+  
++
+  xlim(0, 1500) +
+  ylim(0, 10)
+
+
+```
 
 
 
@@ -101,7 +300,7 @@ The variables that were significant in our regression of where Boston bike stati
 
 5.3 Limitations
 
-The data we used was from 2019, before the COVID-19 pandemic struck.  Usage patterns have certainly changed since the pandemic—in some temporary, and some likely permanent, ways—and in fact there have been analyses performed on these changes.  Because our analysis sought to investigate the baseline structure of the system, we worked with data from before the pandemic, but COVID-19 has transformed our society forever, so those changes are important to consider in future planning efforts.
+The data we used is from the 5-year estimate from 2016-2020; therefore, this estimate primarily includes data from before the COVID-19 pandemic struck.  Usage patterns have certainly changed since the pandemic—in some temporary, and some likely permanent, ways—and in fact there have been analyses performed on these changes.  Because our analysis sought to investigate the baseline structure of the system, we worked with data from before the pandemic, but COVID-19 has transformed our society forever, so those changes are important to consider in future planning efforts.
 
 Over the course our project, we encountered two primary analytical difficulties.  The first was comparing results across regressions.  A given independent variable might be significant in one regression and not significant in the other, even though the dependent variable of bike station locations was the same between both models.  We could understand how the coefficient and significance might vary based on the other variables in the model, but it did not make sense to us that a variable that was statistically significant in one analysis could wholly drop from the statistically significant view in another model with the same outcome variable.  The other analytical issue we faced was the types of variables available to us.  The tidycensus package allows users to access and analyze the Census data quickly and easily, but it doesn’t, of course, change what kinds of variables the Census includes.  Even with our fairly wide distribution of variables, we still only explained about 10% of the variation in bike station locations in Boston.  With more kinds of variables—say about land use types, business openings and closures, or consumer expenditures—we might capture more of the dynamics that help determine where these bike share stations get built.
 
