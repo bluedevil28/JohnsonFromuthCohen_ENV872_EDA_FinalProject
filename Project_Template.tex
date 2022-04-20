@@ -5,6 +5,17 @@
 \documentclass[
   12pt,
 ]{article}
+\title{Bike Stations in Boston}
+\usepackage{etoolbox}
+\makeatletter
+\providecommand{\subtitle}[1]{% add subtitle to \maketitle
+  \apptocmd{\@title}{\par {\large #1 \par}}{}{}
+}
+\makeatother
+\subtitle{\url{https://github.com/bluedevil28/JohnsonFromuthCohen_ENV872_EDA_FinalProject}}
+\author{Laurel Cohen, Jeff Fromuth, Blair Johnson}
+\date{}
+
 \usepackage{amsmath,amssymb}
 \usepackage{lmodern}
 \usepackage{iftex}
@@ -75,25 +86,14 @@
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
 
-\title{Bike Stations in Boston}
-\usepackage{etoolbox}
-\makeatletter
-\providecommand{\subtitle}[1]{% add subtitle to \maketitle
-  \apptocmd{\@title}{\par {\large #1 \par}}{}{}
-}
-\makeatother
-\subtitle{\url{https://github.com/bluedevil28/JohnsonFromuthCohen_ENV872_EDA_FinalProject}}
-\author{Laurel Cohen, Jeff Fromuth, Blair Johnson}
-\date{}
-
 \begin{document}
 \maketitle
 
 \newpage
 
-\hypertarget{rationale-and-research-questions}{%
+\hypertarget{rationale-and-research-question}{%
 \section{Rationale and Research
-Questions}\label{rationale-and-research-questions}}
+Question}\label{rationale-and-research-question}}
 
 In the era of the climate crisis, the race is on to find ways to reduce
 the greenhouse gas (GHG) emissions connected with every possible modern
@@ -155,9 +155,9 @@ files to our project repository. All data and code for this project can
 be retrieved from the GitHub repository.
 
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.1907}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.7373}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.0720}}@{}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.19}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.74}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.07}}@{}}
 \caption{Dataset Information}\tabularnewline
 \toprule
 \begin{minipage}[b]{\linewidth}\raggedright
@@ -337,66 +337,22 @@ people just don't know enough about bike sharing programs to be
 comfortable taking advantage of them, despite their ready availability
 near where people live.
 
-\hypertarget{alternate-commute-modes-negatively-correlate-with-boston-bike-station-locations}{%
-\subsection{Alternate commute modes negatively correlate with Boston
+\hypertarget{alternate-commute-modes-have-mixed-correlation-with-boston-bike-station-locations}{%
+\subsection{Alternate commute modes have mixed correlation with Boston
 bike station
-locations}\label{alternate-commute-modes-negatively-correlate-with-boston-bike-station-locations}}
-
-\hypertarget{the-variables-that-were-significant-in-our-regression-of-boston-bike-station-locations-were-the-proportion-of-people-who-commute-to-work-via-public-transit-and-the-portion-who-drive-to-work-alone-in-a-private-car.-for-both-variables-the-coefficient-in-the-regression-was-negative--2.3935-at-p-0.00418-for-public-transit-commuters-and--3.0081-at-p-0.01550-for-those-who-drive-to-work-in-cars-by-themselves.-our-model-shows-that-the-more-people-there-are-in-a-given-census-tract-who-commute-to-work-either-alone-in-personal-vehicles-or-by-public-transit-the-lower-number-of-bike-stations-found-in-that-census-tract.-this-finding-is-not-what-we-ancticipated-we-posited-that-there-would-be-a-bundling-of-pro-environment-indicatorsmore-people-using-environmentally-friendly-commuting-methods-like-public-transit-correlating-with-more-bike-stations-available-for-people-to-use-for-errands-recreation-or-commuting.-instead-the-two-significant-variables-in-the-regression-point-in-opposite-directions-fewer-bike-stations-as-more-people-commute-to-work-alone-in-private-cars-the-bundling-we-expected-but-also-fewer-bike-stations-as-more-people-commute-to-work-using-public-transit-not-the-bundling-we-expected.-perhaps-the-locations-of-boston-bike-stations-are-irrespective-of-population-characteristics-altogether-and-instead-track-other-elements-of-the-city-such-as-areas-that-are-most-popular-with-tourists.-also-the-dataset-we-used-for-carpooling-behavior-was-much-smaller-than-we-had-hoped-raising-the-question-of-whether-its-sample-size-is-sufficiently-large-to-merit-statistical-confidence-in-the-associated-findings.the-larger-environmental-context-around-bike-sharing-programs-asks-whether-these-programs-reduce-the-number-of-miles-that-urban-residents-drive-as-people-switch-between-driving-and-other-modes-of-transport-for-their-daily-activities.-considering-transportation-is-responsible-for-27-of-2020-ghg-emissions-in-us-epa-2022-this-question-is-an-urgent-one.-bike-share-programs-have-been-found-to-reduce-car-use-in-some-cities-but-not-alland-the-effectiveness-of-bike-share-programs-in-protecting-the-environment-is-dependent-on-whether-these-programs-replace-car-use-fishman-et-al.-2014.-with-that-said-bike-share-programs-are-most-effective-at-curbing-ghgs-when-they-catalyze-other-changes-like-increases-in-private-bike-use-improvements-to-bicycle-infrastructure-and-support-of-other-policies-that-facilitate-cycling-schmidt-2018.}{%
-\section{The variables that were significant in our regression of Boston
-bike station locations were the proportion of people who commute to work
-via public transit, and the portion who drive to work alone in a private
-car. For both variables, the coefficient in the regression was negative:
--2.3935 at p = 0.00418 for public transit commuters, and -3.0081 at p =
-0.01550 for those who drive to work in cars by themselves. Our model
-shows that the more people there are in a given census tract who commute
-to work either alone in personal vehicles or by public transit, the
-lower number of bike stations found in that census tract. This finding
-is not what we ancticipated: we posited that there would be a bundling
-of pro-environment indicators--more people using environmentally
-friendly commuting methods like public transit correlating with more
-bike stations available for people to use for errands, recreation, or
-commuting. Instead, the two significant variables in the regression
-point in opposite directions: fewer bike stations as more people commute
-to work alone in private cars (the bundling we expected), but also fewer
-bike stations as more people commute to work using public transit (not
-the bundling we expected). Perhaps the locations of Boston bike stations
-are irrespective of population characteristics altogether, and instead
-track other elements of the city, such as areas that are most popular
-with tourists. Also, the dataset we used for carpooling behavior was
-much smaller than we had hoped, raising the question of whether its
-sample size is sufficiently large to merit statistical confidence in the
-associated findings.The larger environmental context around bike sharing
-programs asks whether these programs reduce the number of miles that
-urban residents drive, as people switch between driving and other modes
-of transport for their daily activities. Considering transportation is
-responsible for 27\% of 2020 GHG emissions in US (EPA 2022), this
-question is an urgent one. Bike share programs have been found to reduce
-car use in some cities, but not all---and the effectiveness of bike
-share programs in protecting the environment is ``dependent on whether
-{[}these programs replace{]} car use'' (Fishman et al.~2014). With that
-said, bike share programs are most effective at curbing GHGs when they
-catalyze other changes, like increases in private bike use, improvements
-to bicycle infrastructure, and support of other policies that facilitate
-cycling (Schmidt
-2018).}\label{the-variables-that-were-significant-in-our-regression-of-boston-bike-station-locations-were-the-proportion-of-people-who-commute-to-work-via-public-transit-and-the-portion-who-drive-to-work-alone-in-a-private-car.-for-both-variables-the-coefficient-in-the-regression-was-negative--2.3935-at-p-0.00418-for-public-transit-commuters-and--3.0081-at-p-0.01550-for-those-who-drive-to-work-in-cars-by-themselves.-our-model-shows-that-the-more-people-there-are-in-a-given-census-tract-who-commute-to-work-either-alone-in-personal-vehicles-or-by-public-transit-the-lower-number-of-bike-stations-found-in-that-census-tract.-this-finding-is-not-what-we-ancticipated-we-posited-that-there-would-be-a-bundling-of-pro-environment-indicatorsmore-people-using-environmentally-friendly-commuting-methods-like-public-transit-correlating-with-more-bike-stations-available-for-people-to-use-for-errands-recreation-or-commuting.-instead-the-two-significant-variables-in-the-regression-point-in-opposite-directions-fewer-bike-stations-as-more-people-commute-to-work-alone-in-private-cars-the-bundling-we-expected-but-also-fewer-bike-stations-as-more-people-commute-to-work-using-public-transit-not-the-bundling-we-expected.-perhaps-the-locations-of-boston-bike-stations-are-irrespective-of-population-characteristics-altogether-and-instead-track-other-elements-of-the-city-such-as-areas-that-are-most-popular-with-tourists.-also-the-dataset-we-used-for-carpooling-behavior-was-much-smaller-than-we-had-hoped-raising-the-question-of-whether-its-sample-size-is-sufficiently-large-to-merit-statistical-confidence-in-the-associated-findings.the-larger-environmental-context-around-bike-sharing-programs-asks-whether-these-programs-reduce-the-number-of-miles-that-urban-residents-drive-as-people-switch-between-driving-and-other-modes-of-transport-for-their-daily-activities.-considering-transportation-is-responsible-for-27-of-2020-ghg-emissions-in-us-epa-2022-this-question-is-an-urgent-one.-bike-share-programs-have-been-found-to-reduce-car-use-in-some-cities-but-not-alland-the-effectiveness-of-bike-share-programs-in-protecting-the-environment-is-dependent-on-whether-these-programs-replace-car-use-fishman-et-al.-2014.-with-that-said-bike-share-programs-are-most-effective-at-curbing-ghgs-when-they-catalyze-other-changes-like-increases-in-private-bike-use-improvements-to-bicycle-infrastructure-and-support-of-other-policies-that-facilitate-cycling-schmidt-2018.}}
-
-\hypertarget{alternate-commute-modes-negatively-correlate-with-boston-bike-station-locations-1}{%
-\subsection{Alternate commute modes negatively correlate with Boston
-bike station
-locations}\label{alternate-commute-modes-negatively-correlate-with-boston-bike-station-locations-1}}
+locations}\label{alternate-commute-modes-have-mixed-correlation-with-boston-bike-station-locations}}
 
 The variables that were significant in our regression of Boston bike
 station locations were the proportion of people who commute to work via
 public transit, and the portion who drive to work alone in a private
 car. For both variables, the coefficient in the regression was negative:
--2.3843 at p = 0.000332 for public transit commuters, and -2.1573 at p =
-0.027758 for those who drive to work in cars by themselves (Table 2).
-Our model shows that the more people there are in a given census tract
-who commute to work either alone in personal vehicles or by public
-transit, the lower number of bike stations found in that census tract.
-This finding is not what we anticipated: we posited that there would be
-a bundling of pro-environment indicators--more people using
+-2.3935 at p = 0.00418 for public transit commuters, and -3.0081 at p =
+0.01550 for those who drive to work in cars by themselves (Table 2). Our
+model shows that the more people there are in a given census tract who
+commute to work either alone in personal vehicles or by public transit,
+the lower number of bike stations found in that census tract. This
+finding is not what we anticipated: we posited that there would be a
+bundling of pro-environment indicators--more people using
 environmentally friendly commuting methods like public transit
 correlating with more bike stations available for people to use for
 errands, recreation, or commuting. Instead, the two significant
@@ -429,33 +385,19 @@ Percent driving alone & -3.0081 & 0.01550 & * \\
 \bottomrule
 \end{longtable}
 
-\hypertarget{alternate-commute-modes-correlate-with-boston-bike-station-locations}{%
-\subsection{Alternate commute modes correlate with Boston bike station
-locations}\label{alternate-commute-modes-correlate-with-boston-bike-station-locations}}
-
-The variables that were significant in our regression of where Boston
-bike stations are were those who commute to work via public transit, and
-those who drive to work alone in a private vehicle. For both variables,
-the coefficient in the regression was negative: -2.3935 at p = 0.00418
-for public transit commuters, and -3.0081 at p = 0.01550 for those who
-drive to work in cars by themselves. Our regression tells us that those
-living nearer to bike stations are likelier to commute to work by public
-transit and less likely to commute to work alone in personal vehicles,
-but this relationship is a measure of correlation, not causation: the
-regression cannot prove a relationship with directionality between the
-variables. The larger environmental context around bike sharing programs
-asks whether these programs reduce the number of miles that urban
-residents drive, as people switch between driving and other modes of
-transport for their daily activities. Considering transportation is
-responsible for 27\% of 2020 GHG emissions in US (EPA 2022), this
-question is an urgent one. Bike share programs have been found to reduce
-car use in some cities, but not all---and the effectiveness of bike
-share programs in protecting the environment is ``dependent on whether
-{[}these programs replace{]} car use'' (Fishman et al.~2014). With that
-said, bike share programs are most effective at curbing GHGs when they
-catalyze other changes, like increases in private bike use, improvements
-to bicycle infrastructure, and support of other policies that facilitate
-cycling (Schmidt 2018).
+The larger environmental context around bike sharing programs asks
+whether these programs reduce the number of miles that urban residents
+drive, as people switch between driving and other modes of transport for
+their daily activities. Considering transportation is responsible for
+27\% of 2020 GHG emissions in US (EPA 2022), this question is an urgent
+one. Bike share programs have been found to reduce car use in some
+cities, but not all---and the effectiveness of bike share programs in
+protecting the environment is ``dependent on whether {[}these programs
+replace{]} car use'' (Fishman et al.~2014). With that said, bike share
+programs are most effective at curbing GHGs when they catalyze other
+changes, like increases in private bike use, improvements to bicycle
+infrastructure, and support of other policies that facilitate cycling
+(Schmidt 2018).
 
 \hypertarget{limitations}{%
 \subsection{Limitations}\label{limitations}}
