@@ -71,8 +71,10 @@ In the era of the climate crisis, the race is on to find ways to reduce the gree
 
 As with any other new amenity, it is worth scrutinizing how and where a given municipality with bike sharing chooses to make that amenity available.  For our study, we chose to investigate the siting of bike-sharing stations in Boston.  The Census data offered thousands of variables, of which we selected several: demographic, including family size and race; financial, including homeownership status and income; and professional, including employment status and mode of commute to work.  For this analysis, we sought to determine whether the locations of bike-sharing stations in the city were related to the categories of people found across census tracts.  We chose Boston because its data availability was robust and all the members of our group have lived in or near Boston, and we focused on bike sharing programs because several group members are specifically interested in questions of equity and access in the world of transportation.  Public officials in Boston have also publicly expressed a desire to make bike sharing available to all, so our team wondered whether that sentiment was evident in the real locations of bike stations in the city.
 
-We chose the following question to anchor our inquiry: \
+We chose the following question to anchor our inquiry:
+\begin{center}
 Are bike sharing stations in Boston equally available across population groups?
+\end{center}
 
 \newpage
 
