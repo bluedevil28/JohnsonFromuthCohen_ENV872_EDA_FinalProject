@@ -1,0 +1,64 @@
+---
+title: "Data Exploratory Analysis_AIC"
+author: "Blair Johnson"
+date: '2022-04-19'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+
+library(tidycensus)
+library(rgdal)
+library(uuid)
+library(dplyr)
+options(tigris_use_cache = TRUE)
+library(sf)
+library(tigris)
+library(leaflet)
+library(mapview)
+mapviewOptions(fgb = FALSE)
+library(ggplot2)
+library(tidyr)
+
+
+```
+
+```{r}
+
+Bike.Data.Census <- read.csv("../JohnsonFromuthCohen_ENV872_EDA_FinalProject/Data_Processed/Bikes.Census.Stations_updated.csv")
+
+```
+
+```{r cars}
+bike.variables.model <- lm(data=Bike.Data.Census, NumStations ~ perwhite + per.homeowner + per.public +carpool +drive_alone + pernonwhite)
+summary(bike.variables.model)
+#R-squared 0.1129 with per white, per homeowner, per.public, carpool, drive alone
+#R-square was lower when added onePrnt6to17(children6-17 with one parent) and PovChld6_17 (children 6-17 in poverty)
+
+```
+
+
+```{r cars}
+Bikes.AIC.1 <- lm (data=Bike.Data.Census, NumStations ~ perwhite + per.homeowner + per.public + carpool + drive_alone) 
+step(Bikes.AIC.1)
+
+Bikes.AIC.2 <- lm (data=Bike.Data.Census, NumStations ~ perwhite + per.homeowner + per.public + carpool ) 
+step(Bikes.AIC.2)
+#<none> is first here 
+
+Bikes.AIC.3 <-  lm (data=Bike.Data.Census, NumStations ~ pernonwhite + per.homeowner + per.public) 
+step(Bikes.AIC.3)
+
+Bikes.AIC.4 <- lm (data=Bike.Data.Census, NumStations ~  per.homeowner + per.public ) 
+step(Bikes.AIC.4)
+
+Bikes.AIC.5 <- lm (data=Bike.Data.Census, NumStations ~ perwhite + per.homeowner + carpool)
+step(Bikes.AIC.5)
+```
+
+```{r}
+bike.variables.model.2 <-lm(data=Bike.Data.Census, NumStations ~ per.public + drive_alone)
+summary(bike.variables.model.2)
+```
+
+
